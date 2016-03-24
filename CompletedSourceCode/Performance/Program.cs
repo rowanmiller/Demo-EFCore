@@ -1,0 +1,175 @@
+﻿using System;
+using System.Data.Entity;
+using System.Diagnostics;
+using System.Linq;
+
+namespace Performance
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Warmup();
+
+            #region ToList
+            Console.WriteLine("Query ToList");
+            RunTest(
+                ef6Test: () =>
+                {
+                    using (var db = new EF6.AdventureWorksContext())
+                    {
+                        db.Customers.ToList();
+                    }
+                },
+                ef7Test: () =>
+                {
+                    using (var db = new EFCore.AdventureWorksContext())
+                    {
+                        db.Customer.ToList();
+                    }
+                });
+            #endregion
+
+            #region ComplexQuery
+            Console.WriteLine();
+            Console.WriteLine("Query Complex");
+            RunTest(
+                ef6Test: () =>
+                {
+                    using (var db = new EF6.AdventureWorksContext())
+                    {
+                        db.Customers
+                            .Include(c => c.Person)
+                            .Include(c => c.SalesOrderHeaders)
+                            .Where(c => !c.AccountNumber.EndsWith("1"))
+                            .OrderBy(c => c.AccountNumber)
+                            .ThenBy(c => c.ModifiedDate)
+                            .Skip(100)
+                            .GroupBy(c => c.TerritoryID)
+                            .ToList();
+                    }
+                },
+                ef7Test: () =>
+                {
+                    using (var db = new EFCore.AdventureWorksContext())
+                    {
+                        db.Customer
+                            .Include(c => c.Person)
+                            .Include(c => c.SalesOrderHeader)
+                            .Where(c => !c.AccountNumber.EndsWith("1"))
+                            .OrderBy(c => c.AccountNumber)
+                            .ThenBy(c => c.ModifiedDate)
+                            .Skip(100)
+                            .GroupBy(c => c.TerritoryID)
+                            .ToList();
+                    }
+                });
+            #endregion
+
+            #region Add & SaveChanges
+            Console.WriteLine();
+            Console.WriteLine("Add & SaveChanges");
+            RunTest(
+                () =>
+                {
+                    using (var db = new EF6.AdventureWorksContext())
+                    {
+                        for (int i = 0; i < 1000; i++)
+                        {
+                            db.ProductCategories.Add(new EF6.ProductCategory { Name = $"Test {Guid.NewGuid()}" });
+                        }
+                        db.SaveChanges();
+                    }
+                },
+                () =>
+                {
+                    using (var db = new EFCore.AdventureWorksContext())
+                    {
+                        for (int i = 0; i < 1000; i++)
+                        {
+                            db.ProductCategory.Add(new EFCore.ProductCategory { Name = $"Test {Guid.NewGuid()}" });
+                        }
+                        db.SaveChanges();
+                    }
+                });
+            #endregion
+
+            #region Add & SaveChanges (EF6 Optimized)
+            //Console.WriteLine();
+            //Console.WriteLine("Add & SaveChanges (EF6 Optimized)");
+            //RunTest(
+            //    () =>
+            //    {
+            //        using (var db = new EF6.AdventureWorksContext())
+            //        {
+            //            db.Configuration.AutoDetectChangesEnabled = false;
+            //            var categories = new EF6.ProductCategory[1000];
+            //            for (int i = 0; i < 1000; i++)
+            //            {
+            //                categories[i] = new EF6.ProductCategory { Name = $"Test {Guid.NewGuid()}" };
+            //            }
+            //            db.ProductCategories.AddRange(categories);
+            //            db.SaveChanges();
+            //        }
+            //    },
+            //    () =>
+            //    {
+            //        using (var db = new EFCore.AdventureWorksContext())
+            //        {
+            //            for (int i = 0; i < 1000; i++)
+            //            {
+            //                db.ProductCategory.Add(new EFCore.ProductCategory { Name = $"Test {Guid.NewGuid()}" });
+            //            }
+            //            db.SaveChanges();
+            //        }
+            //    });
+            #endregion
+        }
+
+        private static void Warmup()
+        {
+            using (var db = new EF6.AdventureWorksContext())
+            {
+                db.Database.ExecuteSqlCommand(
+                    @"DELETE FROM Production.ProductCategory WHERE Name LIKE 'Test %';
+                      DECLARE @currentMax AS int = (SELECT MAX(ProductCategoryId) FROM [Production].[ProductCategory]);
+                      DBCC CHECKIDENT ('[Production].[ProductCategory]', RESEED, @currentMax);");
+            }
+
+            using (var db = new EF6.AdventureWorksContext())
+            {
+                db.Customers.First();
+            }
+
+            using (var db = new EFCore.AdventureWorksContext())
+            {
+                db.Customer.First();
+            }
+        }
+
+        private static void RunTest(Action ef6Test, Action ef7Test)
+        {
+            var stopwatch = new Stopwatch();
+            for (int iteration = 0; iteration < 3; iteration++)
+            {
+                Console.WriteLine($" Iteration {iteration}");
+
+                stopwatch.Restart();
+                ef6Test();
+                stopwatch.Stop();
+                var ef6 = stopwatch.ElapsedMilliseconds;
+                Console.WriteLine($"  - EF6.x:      {ef6.ToString().PadLeft(4)}ms");
+
+                stopwatch.Restart();
+                ef7Test();
+                stopwatch.Stop();
+                var efCore = stopwatch.ElapsedMilliseconds;
+                Console.WriteLine($"  - EF Core:    {efCore.ToString().PadLeft(4)}ms");
+
+                var result = (ef6 - efCore) / (double)ef6;
+                Console.WriteLine($"  - Improvement: {result.ToString("P0")}");
+                Console.WriteLine();
+            }
+        }
+    }
+}
