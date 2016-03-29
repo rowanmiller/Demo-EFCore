@@ -32,6 +32,7 @@
             this.save = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.notes = new System.Windows.Forms.ListBox();
+            this.upload = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // note
@@ -71,11 +72,22 @@
             this.notes.Size = new System.Drawing.Size(743, 251);
             this.notes.TabIndex = 4;
             // 
+            // upload
+            // 
+            this.upload.Location = new System.Drawing.Point(308, 31);
+            this.upload.Name = "upload";
+            this.upload.Size = new System.Drawing.Size(75, 23);
+            this.upload.TabIndex = 5;
+            this.upload.Text = "Upload";
+            this.upload.UseVisualStyleBackColor = true;
+            this.upload.Click += new System.EventHandler(this.upload_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(768, 462);
+            this.Controls.Add(this.upload);
             this.Controls.Add(this.notes);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.save);
@@ -94,6 +106,7 @@
         private System.Windows.Forms.Button save;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ListBox notes;
+        private System.Windows.Forms.Button upload;
     }
 }
 

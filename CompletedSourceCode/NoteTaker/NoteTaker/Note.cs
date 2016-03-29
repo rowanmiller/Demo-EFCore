@@ -8,9 +8,9 @@ namespace NoteTaker
 {
     public class Note
     {
-        public int NoteId { get; set; }
+        public Guid NoteId { get; set; }
         public string Text { get; set; }
         public DateTime Created { get; set; }
-        public bool IsSynced { get; set; }
+        public bool IsUploaded { get; set; }
     }
 }

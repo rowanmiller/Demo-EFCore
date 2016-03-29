@@ -11,6 +11,7 @@ namespace NoteTaker.Classic
     public partial class MainForm : Form
     {
         private DbContextOptions _localDatabaseOptions;
+        private DbContextOptions _remoteDatabaseOptions;
 
         public MainForm()
         {
@@ -20,6 +21,10 @@ namespace NoteTaker.Classic
             var builder = new DbContextOptionsBuilder();
             builder.UseSqlite($"Filename={localFile}");
             _localDatabaseOptions = builder.Options;
+
+            builder = new DbContextOptionsBuilder();
+            builder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=NoteTaker;Trusted_Connection=True;");
+            _remoteDatabaseOptions = builder.Options;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -28,6 +33,11 @@ namespace NoteTaker.Classic
             {
                 db.Database.EnsureCreated();
                 notes.Items.AddRange(db.Notes.ToArray());
+            }
+
+            using (var db = new NoteContext(_remoteDatabaseOptions))
+            {
+                db.Database.EnsureCreated();
             }
         }
 
@@ -43,6 +53,29 @@ namespace NoteTaker.Classic
 
             notes.Items.Insert(0, note);
             this.note.Text = string.Empty;
+        }
+
+        private void upload_Click(object sender, EventArgs e)
+        {
+            using (var localDb = new NoteContext(_localDatabaseOptions))
+            {
+                using (var remoteDb = new NoteContext(_remoteDatabaseOptions))
+                {
+                    var newNotes = localDb.Notes.Where(n => !n.IsUploaded).ToList();
+
+                    foreach (var item in newNotes)
+                    {
+                        remoteDb.Notes.Add(item);
+                        item.IsUploaded = true;
+                    }
+
+                    remoteDb.SaveChanges();
+                    localDb.SaveChanges();
+
+                    MessageBox.Show($"Uploaded {newNotes.Count} notes.");
+                }
+
+            }
         }
     }
 }
