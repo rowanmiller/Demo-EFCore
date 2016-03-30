@@ -11,10 +11,7 @@ namespace ReplacingServices
 
         public override RelationalTypeMapping GetMapping(IProperty property)
         {
-            if (property.HasClrAttribute<XmlAttribute>())
-            {
-                return _xml;
-            }
+            // TODO Use XML type if property has [Xml] attribute
 
             return base.FindMapping(property);
         }
