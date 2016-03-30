@@ -35,14 +35,13 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.createdDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.textDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.isUploadedDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.noteBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.panel2 = new System.Windows.Forms.Panel();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uploadMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.createdDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.textDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -119,8 +118,7 @@
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.createdDataGridViewTextBoxColumn,
-            this.textDataGridViewTextBoxColumn,
-            this.isUploadedDataGridViewCheckBoxColumn});
+            this.textDataGridViewTextBoxColumn});
             this.dataGridView1.DataSource = this.noteBindingSource;
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView1.Location = new System.Drawing.Point(10, 33);
@@ -129,32 +127,6 @@
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridView1.Size = new System.Drawing.Size(728, 192);
             this.dataGridView1.TabIndex = 6;
-            // 
-            // createdDataGridViewTextBoxColumn
-            // 
-            this.createdDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.createdDataGridViewTextBoxColumn.DataPropertyName = "Created";
-            this.createdDataGridViewTextBoxColumn.HeaderText = "Taken";
-            this.createdDataGridViewTextBoxColumn.Name = "createdDataGridViewTextBoxColumn";
-            this.createdDataGridViewTextBoxColumn.ReadOnly = true;
-            this.createdDataGridViewTextBoxColumn.Width = 93;
-            // 
-            // textDataGridViewTextBoxColumn
-            // 
-            this.textDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.textDataGridViewTextBoxColumn.DataPropertyName = "Text";
-            this.textDataGridViewTextBoxColumn.HeaderText = "Note";
-            this.textDataGridViewTextBoxColumn.Name = "textDataGridViewTextBoxColumn";
-            this.textDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // isUploadedDataGridViewCheckBoxColumn
-            // 
-            this.isUploadedDataGridViewCheckBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.isUploadedDataGridViewCheckBoxColumn.DataPropertyName = "IsUploaded";
-            this.isUploadedDataGridViewCheckBoxColumn.HeaderText = "Uploaded";
-            this.isUploadedDataGridViewCheckBoxColumn.Name = "isUploadedDataGridViewCheckBoxColumn";
-            this.isUploadedDataGridViewCheckBoxColumn.ReadOnly = true;
-            this.isUploadedDataGridViewCheckBoxColumn.Width = 102;
             // 
             // noteBindingSource
             // 
@@ -195,6 +167,23 @@
             this.uploadMenuItem.Text = "Upload to central database";
             this.uploadMenuItem.Click += new System.EventHandler(this.upload_Click);
             // 
+            // createdDataGridViewTextBoxColumn
+            // 
+            this.createdDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.createdDataGridViewTextBoxColumn.DataPropertyName = "Created";
+            this.createdDataGridViewTextBoxColumn.HeaderText = "Taken";
+            this.createdDataGridViewTextBoxColumn.Name = "createdDataGridViewTextBoxColumn";
+            this.createdDataGridViewTextBoxColumn.ReadOnly = true;
+            this.createdDataGridViewTextBoxColumn.Width = 93;
+            // 
+            // textDataGridViewTextBoxColumn
+            // 
+            this.textDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.textDataGridViewTextBoxColumn.DataPropertyName = "Text";
+            this.textDataGridViewTextBoxColumn.HeaderText = "Note";
+            this.textDataGridViewTextBoxColumn.Name = "textDataGridViewTextBoxColumn";
+            this.textDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -231,12 +220,11 @@
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.BindingSource noteBindingSource;
-        private System.Windows.Forms.DataGridViewTextBoxColumn createdDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn textDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn isUploadedDataGridViewCheckBoxColumn;
         private System.Windows.Forms.MenuStrip menuStrip;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem uploadMenuItem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn createdDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn textDataGridViewTextBoxColumn;
     }
 }
 
