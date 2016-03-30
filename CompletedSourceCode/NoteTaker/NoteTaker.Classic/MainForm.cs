@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.Entity;
 using Microsoft.Data.Entity.Infrastructure;
 using System;
+using System.Configuration;
 using System.Data;
 using System.IO;
 using System.Linq;
@@ -10,31 +11,20 @@ namespace NoteTaker.Classic
 {
     public partial class MainForm : Form
     {
-        private DbContextOptions _localDatabaseOptions;
         private DbContextOptions _remoteDatabaseOptions;
 
         public MainForm()
         {
             InitializeComponent();
 
-            var localFile = Path.Combine(Application.UserAppDataPath, "Notes.db");
             var builder = new DbContextOptionsBuilder();
-            builder.UseSqlite($"Filename={localFile}");
-            _localDatabaseOptions = builder.Options;
-
-            builder = new DbContextOptionsBuilder();
-            builder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=NoteTaker;Trusted_Connection=True;");
+            builder.UseSqlServer(ConfigurationManager.ConnectionStrings["RemoteDatabase"].ConnectionString);
             _remoteDatabaseOptions = builder.Options;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            using (var db = new NoteContext(_localDatabaseOptions))
-            {
-                db.Database.EnsureCreated();
-            }
-
-            using (var db = new NoteContext(_remoteDatabaseOptions))
+            using (var db = new NoteContext())
             {
                 db.Database.EnsureCreated();
             }
@@ -46,7 +36,7 @@ namespace NoteTaker.Classic
         {
             var note = new Note { Created = DateTime.Now, Text = this.note.Text };
 
-            using (var db = new NoteContext(_localDatabaseOptions))
+            using (var db = new NoteContext())
             {
                 db.Notes.Add(note);
                 db.SaveChanges();
@@ -58,31 +48,33 @@ namespace NoteTaker.Classic
 
         private void upload_Click(object sender, EventArgs e)
         {
-            using (var localDb = new NoteContext(_localDatabaseOptions))
+            using (var localDb = new NoteContext())
             {
+                // Find notes that are not uploaded
+                var newNotes = localDb.Notes
+                    .Where(n => !n.IsUploaded)
+                    .ToList();
+
+                // Upload to remote database
                 using (var remoteDb = new NoteContext(_remoteDatabaseOptions))
                 {
-                    var newNotes = localDb.Notes.Where(n => !n.IsUploaded).ToList();
-
-                    foreach (var item in newNotes)
-                    {
-                        remoteDb.Notes.Add(item);
-                        item.IsUploaded = true;
-                    }
-
+                    remoteDb.Database.EnsureCreated();
+                    remoteDb.Notes.AddRange(newNotes);
                     remoteDb.SaveChanges();
-                    localDb.SaveChanges();
-
-                    MessageBox.Show($"Uploaded {newNotes.Count} notes.");
                 }
 
+                // Mark as uploaded in local database
+                newNotes.ForEach(n => n.IsUploaded = true);
+                localDb.SaveChanges();
+
+                MessageBox.Show($"Uploaded {newNotes.Count} notes.");
                 LoadExistingNotes();
             }
         }
 
         private void LoadExistingNotes()
         {
-            using (var db = new NoteContext(_localDatabaseOptions))
+            using (var db = new NoteContext())
             {
                 noteBindingSource.DataSource = db.Notes
                     .OrderByDescending(n => n.Created)

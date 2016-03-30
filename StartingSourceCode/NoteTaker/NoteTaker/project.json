@@ -1,0 +1,15 @@
+﻿{
+  "frameworks": {
+    "netstandard1.4": {
+      "imports": [
+        "portable-net452+win81",
+        "dnxcore50"
+      ]
+    }
+  },
+  "dependencies": {
+    "EntityFramework.Core": "7.0.0-rc1-final",
+    "EntityFramework.Sqlite": "7.0.0-rc1-final",
+    "Microsoft.NETCore": "5.0.0"
+  }
+}

@@ -9,7 +9,7 @@ namespace Performance
     {
         static void Main(string[] args)
         {
-            Warmup();
+            ResetAndWarmup();
 
             #region ToList
             Console.WriteLine("Query ToList");
@@ -25,7 +25,7 @@ namespace Performance
                 {
                     using (var db = new EFCore.AdventureWorksContext())
                     {
-                        db.Customer.ToList();
+                        db.Customers.ToList();
                     }
                 });
             #endregion
@@ -53,9 +53,9 @@ namespace Performance
                 {
                     using (var db = new EFCore.AdventureWorksContext())
                     {
-                        db.Customer
+                        db.Customers
                             .Include(c => c.Person)
-                            .Include(c => c.SalesOrderHeader)
+                            .Include(c => c.SalesOrderHeaders)
                             .Where(c => !c.AccountNumber.EndsWith("1"))
                             .OrderBy(c => c.AccountNumber)
                             .ThenBy(c => c.ModifiedDate)
@@ -87,7 +87,7 @@ namespace Performance
                     {
                         for (int i = 0; i < 1000; i++)
                         {
-                            db.ProductCategory.Add(new EFCore.ProductCategory { Name = $"Test {Guid.NewGuid()}" });
+                            db.ProductCategories.Add(new EFCore.ProductCategory { Name = $"Test {Guid.NewGuid()}" });
                         }
                         db.SaveChanges();
                     }
@@ -95,38 +95,38 @@ namespace Performance
             #endregion
 
             #region Add & SaveChanges (EF6 Optimized)
-            //Console.WriteLine();
-            //Console.WriteLine("Add & SaveChanges (EF6 Optimized)");
-            //RunTest(
-            //    () =>
-            //    {
-            //        using (var db = new EF6.AdventureWorksContext())
-            //        {
-            //            db.Configuration.AutoDetectChangesEnabled = false;
-            //            var categories = new EF6.ProductCategory[1000];
-            //            for (int i = 0; i < 1000; i++)
-            //            {
-            //                categories[i] = new EF6.ProductCategory { Name = $"Test {Guid.NewGuid()}" };
-            //            }
-            //            db.ProductCategories.AddRange(categories);
-            //            db.SaveChanges();
-            //        }
-            //    },
-            //    () =>
-            //    {
-            //        using (var db = new EFCore.AdventureWorksContext())
-            //        {
-            //            for (int i = 0; i < 1000; i++)
-            //            {
-            //                db.ProductCategory.Add(new EFCore.ProductCategory { Name = $"Test {Guid.NewGuid()}" });
-            //            }
-            //            db.SaveChanges();
-            //        }
-            //    });
+            Console.WriteLine();
+            Console.WriteLine("Add & SaveChanges (EF6 Optimized)");
+            RunTest(
+                () =>
+                {
+                    using (var db = new EF6.AdventureWorksContext())
+                    {
+                        db.Configuration.AutoDetectChangesEnabled = false;
+                        var categories = new EF6.ProductCategory[1000];
+                        for (int i = 0; i < 1000; i++)
+                        {
+                            categories[i] = new EF6.ProductCategory { Name = $"Test {Guid.NewGuid()}" };
+                        }
+                        db.ProductCategories.AddRange(categories);
+                        db.SaveChanges();
+                    }
+                },
+                () =>
+                {
+                    using (var db = new EFCore.AdventureWorksContext())
+                    {
+                        for (int i = 0; i < 1000; i++)
+                        {
+                            db.ProductCategories.Add(new EFCore.ProductCategory { Name = $"Test {Guid.NewGuid()}" });
+                        }
+                        db.SaveChanges();
+                    }
+                });
             #endregion
         }
 
-        private static void Warmup()
+        private static void ResetAndWarmup()
         {
             using (var db = new EF6.AdventureWorksContext())
             {
@@ -143,7 +143,7 @@ namespace Performance
 
             using (var db = new EFCore.AdventureWorksContext())
             {
-                db.Customer.First();
+                db.Customers.First();
             }
         }
 
