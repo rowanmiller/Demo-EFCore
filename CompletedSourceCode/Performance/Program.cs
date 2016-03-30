@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data.Entity;
 using System.Diagnostics;
 using System.Linq;
 
@@ -39,8 +38,6 @@ namespace Performance
                     using (var db = new EF6.AdventureWorksContext())
                     {
                         db.Customers
-                            .Include(c => c.Person)
-                            .Include(c => c.SalesOrderHeaders)
                             .Where(c => !c.AccountNumber.EndsWith("1"))
                             .OrderBy(c => c.AccountNumber)
                             .ThenBy(c => c.ModifiedDate)
@@ -54,8 +51,6 @@ namespace Performance
                     using (var db = new EFCore.AdventureWorksContext())
                     {
                         db.Customers
-                            .Include(c => c.Person)
-                            .Include(c => c.SalesOrderHeaders)
                             .Where(c => !c.AccountNumber.EndsWith("1"))
                             .OrderBy(c => c.AccountNumber)
                             .ThenBy(c => c.ModifiedDate)
