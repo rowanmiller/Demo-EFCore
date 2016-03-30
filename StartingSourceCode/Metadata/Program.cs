@@ -1,6 +1,9 @@
 ﻿using Microsoft.Data.Entity;
 using System;
-using System.Collections.Generic;
+using System.Data.Entity.Core.Mapping;
+using System.Data.Entity.Core.Metadata.Edm;
+using System.Data.Entity.Infrastructure;
+using System.Linq;
 
 namespace Metadata
 {
@@ -8,49 +11,62 @@ namespace Metadata
     {
         static void Main(string[] args)
         {
-            using (var db = new BloggingContext())
-            {
-                // TODO Find table name for Blog
+            PrintEF6Mappings();
+            PrintEFCoreMappings();
+        }
 
+        private static void PrintEFCoreMappings()
+        {
+            Console.WriteLine("EF Core Mappings");
+            using (var db = new EFCore.BloggingContext())
+            {
+                // TODO Print type to table mappings
             }
         }
-    }
 
-    public class BloggingContext : DbContext
-    {
-        public DbSet<Blog> Blogs { get; set; }
-        public DbSet<Post> Posts { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        private static void PrintEF6Mappings()
         {
-            optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=Demo.Metadata;Trusted_Connection=True;");
-        }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            foreach (var entity in modelBuilder.Model.GetEntityTypes())
+            Console.WriteLine("EF6.x Mappings");
+            using (var db = new EF6.BloggingContext())
             {
-                modelBuilder.Entity(entity.Name).ToTable("tbl_" + entity.ClrType.Name.ToLower());
+                var metadata = ((IObjectContextAdapter)db).ObjectContext.MetadataWorkspace;
+
+                // Get the part of the model that contains info about the actual CLR types
+                var objectItemCollection = ((ObjectItemCollection)metadata
+                    .GetItemCollection(DataSpace.OSpace));
+
+                foreach (var entityType in metadata.GetItems<EntityType>(DataSpace.OSpace))
+                {
+                    // Get the entity set that uses this entity type
+                    var entitySet = metadata
+                        .GetItems<EntityContainer>(DataSpace.CSpace)
+                        .Single()
+                        .EntitySets
+                        .Single(s => s.ElementType.Name == entityType.Name);
+
+                    // Find the mapping between conceptual and storage model for this entity set
+                    var mapping = metadata
+                        .GetItems<EntityContainerMapping>(DataSpace.CSSpace)
+                        .Single()
+                        .EntitySetMappings
+                        .Single(s => s.EntitySet == entitySet);
+
+                    // Find the storage entity set (table) that the entity is mapped
+                    var table = mapping
+                        .EntityTypeMappings.Single()
+                        .Fragments.Single()
+                        .StoreEntitySet;
+
+                    var tableName = (string)table.MetadataProperties["Table"].Value 
+                        ?? table.Name;
+
+                    var clrType = objectItemCollection.GetClrType(entityType);
+
+                    Console.WriteLine($" {clrType.Name} => {tableName}");
+                }
+
+                Console.WriteLine();
             }
         }
-    }
-
-    public class Blog
-    {
-        public int BlogId { get; set; }
-        public string Url { get; set; }
-        public string Metadata { get; set; }
-
-        public List<Post> Posts { get; set; }
-    }
-
-    public class Post
-    {
-        public int PostId { get; set; }
-        public string Title { get; set; }
-        public string Content { get; set; }
-
-        public int BlogId { get; set; }
-        public Blog Blog { get; set; }
     }
 }

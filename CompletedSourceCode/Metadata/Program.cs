@@ -11,16 +11,13 @@ namespace Metadata
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("EF Core Mapping");
-            GetEFCoreMappings();
-
-            Console.WriteLine();
-            Console.WriteLine("EF6.x Mapping");
-            GetEF6Mappings();
+            PrintEF6Mappings();
+            PrintEFCoreMappings();
         }
 
-        private static void GetEFCoreMappings()
+        private static void PrintEFCoreMappings()
         {
+            Console.WriteLine("EF Core Mappings");
             using (var db = new EFCore.BloggingContext())
             {
                 foreach (var entity in db.Model.GetEntityTypes())
@@ -30,8 +27,9 @@ namespace Metadata
             }
         }
 
-        private static void GetEF6Mappings()
+        private static void PrintEF6Mappings()
         {
+            Console.WriteLine("EF6.x Mappings");
             using (var db = new EF6.BloggingContext())
             {
                 var metadata = ((IObjectContextAdapter)db).ObjectContext.MetadataWorkspace;
@@ -65,6 +63,8 @@ namespace Metadata
 
                     Console.WriteLine($" {clrType.Name} => {tableName}");
                 }
+
+                Console.WriteLine();
             }
         }
     }
