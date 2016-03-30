@@ -1,0 +1,28 @@
+﻿<Page
+    x:Class="NoteTaker.Modern.NewNotePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:NoteTaker.Modern"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="100" />
+        </Grid.RowDefinitions>
+        
+        <TextBox Grid.Row="0" Background="White"  Name="Note" AcceptsReturn="True" />
+        
+        <Button Grid.Row="1" Click="Save_Click" Style="{StaticResource SymbolButton}">
+            <StackPanel Orientation="Horizontal">
+                <Grid>
+                    <Ellipse Width="50" Height="50" StrokeThickness="2" Stroke="White"></Ellipse>
+                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE74E;" />
+                </Grid>
+                <TextBlock Text="Save" Margin="10,0,0,0" VerticalAlignment="Center" />
+            </StackPanel>
+        </Button>
+    </Grid>
+</Page>

@@ -5,20 +5,18 @@
     xmlns:local="using:NoteTaker.Modern"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d" Loaded="Page_Loaded">
+    mc:Ignorable="d" Height="600" Width="800">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <StackPanel>
-            <TextBlock FontSize="30">Note Taker</TextBlock>
-            <Button Click="Save_Click">Add</Button>
-            <TextBox Name="Note" AcceptsReturn="True" Height="200" />
-            <ListBox Name="Notes">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Text}" Width="200" />
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-        </StackPanel>
+        <Pivot SelectionChanged="Pivot_SelectionChanged">
+            <Pivot.Items>
+                <PivotItem Header="Take a note">
+                    <local:NewNotePage />
+                </PivotItem>
+                <PivotItem Header="My notes">
+                    <local:ExistingNotesPage />
+                </PivotItem>
+            </Pivot.Items>
+        </Pivot>
     </Grid>
 </Page>

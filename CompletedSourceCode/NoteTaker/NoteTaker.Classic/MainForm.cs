@@ -32,13 +32,14 @@ namespace NoteTaker.Classic
             using (var db = new NoteContext(_localDatabaseOptions))
             {
                 db.Database.EnsureCreated();
-                notes.Items.AddRange(db.Notes.ToArray());
             }
 
             using (var db = new NoteContext(_remoteDatabaseOptions))
             {
                 db.Database.EnsureCreated();
             }
+
+            LoadExistingNotes();
         }
 
         private void save_Click(object sender, EventArgs e)
@@ -51,7 +52,7 @@ namespace NoteTaker.Classic
                 db.SaveChanges();
             }
 
-            notes.Items.Insert(0, note);
+            noteBindingSource.Insert(0, note);
             this.note.Text = string.Empty;
         }
 
@@ -75,6 +76,17 @@ namespace NoteTaker.Classic
                     MessageBox.Show($"Uploaded {newNotes.Count} notes.");
                 }
 
+                LoadExistingNotes();
+            }
+        }
+
+        private void LoadExistingNotes()
+        {
+            using (var db = new NoteContext(_localDatabaseOptions))
+            {
+                noteBindingSource.DataSource = db.Notes
+                    .OrderByDescending(n => n.Created)
+                    .ToList();
             }
         }
     }
