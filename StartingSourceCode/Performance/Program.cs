@@ -39,12 +39,12 @@ namespace Performance
 
             using (var db = new EF6.AdventureWorksContext())
             {
-                db.Customers.First();
+                db.Customers.FirstOrDefault();
             }
 
             using (var db = new EFCore.AdventureWorksContext())
             {
-                db.Customers.First();
+                db.Customers.FirstOrDefault();
             }
         }
 

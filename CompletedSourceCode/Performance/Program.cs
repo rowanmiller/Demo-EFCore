@@ -10,7 +10,14 @@ namespace Performance
         {
             ResetAndWarmup();
 
-            #region ToList
+            RunToListTest();
+            RunComplexQueryTest();
+            RunAddAndSaveChangesTest();
+            RunAddAndSaveChangesOptimizedTest();
+        }
+
+        private static void RunToListTest()
+        {
             Console.WriteLine("Query ToList");
             RunTest(
                 ef6Test: () =>
@@ -27,10 +34,10 @@ namespace Performance
                         db.Customers.ToList();
                     }
                 });
-            #endregion
+        }
 
-            #region ComplexQuery
-            Console.WriteLine();
+        private static void RunComplexQueryTest()
+        {
             Console.WriteLine("Query Complex");
             RunTest(
                 ef6Test: () =>
@@ -59,10 +66,10 @@ namespace Performance
                             .ToList();
                     }
                 });
-            #endregion
+        }
 
-            #region Add & SaveChanges
-            Console.WriteLine();
+        private static void RunAddAndSaveChangesTest()
+        {
             Console.WriteLine("Add & SaveChanges");
             RunTest(
                 () =>
@@ -87,10 +94,10 @@ namespace Performance
                         db.SaveChanges();
                     }
                 });
-            #endregion
+        }
 
-            #region Add & SaveChanges (EF6 Optimized)
-            Console.WriteLine();
+        private static void RunAddAndSaveChangesOptimizedTest()
+        {
             Console.WriteLine("Add & SaveChanges (EF6 Optimized)");
             RunTest(
                 () =>
@@ -118,7 +125,6 @@ namespace Performance
                         db.SaveChanges();
                     }
                 });
-            #endregion
         }
 
         private static void ResetAndWarmup()
@@ -133,12 +139,12 @@ namespace Performance
 
             using (var db = new EF6.AdventureWorksContext())
             {
-                db.Customers.First();
+                db.Customers.FirstOrDefault();
             }
 
             using (var db = new EFCore.AdventureWorksContext())
             {
-                db.Customers.First();
+                db.Customers.FirstOrDefault();
             }
         }
 
