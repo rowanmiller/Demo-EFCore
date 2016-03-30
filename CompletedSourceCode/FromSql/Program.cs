@@ -16,18 +16,13 @@ namespace FromSql
                 Console.Write("Enter a search term: ");
                 var term = Console.ReadLine();
 
-                var blogs = db.Blogs
-                    .FromSql("SELECT * FROM [dbo].[SearchBlogs] (@p0)", term)
+                var blogs = db.Blogs.FromSql("SELECT * FROM dbo.SearchBlogs(@p0)", term)
                     .OrderBy(b => b.Url)
-                    .Include(b => b.Posts);
+                    .Select(b => b.Url);
 
                 foreach (var blog in blogs)
                 {
-                    Console.WriteLine(blog.Url);
-                    foreach (var post in blog.Posts)
-                    {
-                        Console.WriteLine(" - " + post.Title);
-                    }
+                    Console.WriteLine(blog);
                 }
             }
         }
@@ -42,16 +37,7 @@ namespace FromSql
 
                     db.Blogs.Add(new Blog { Url = "http://sample.com/blogs/fish" });
                     db.Blogs.Add(new Blog { Url = "http://sample.com/blogs/catfish" });
-                    db.Blogs.Add(new Blog
-                    {
-                        Url = "http://sample.com/blogs/cats",
-                        Posts = new List<Post>
-                        {
-                            new Post { Title = "Understanding Cats 101" },
-                            new Post { Title = "Cat Grooming Tips" }
-                        }
-                    });
-
+                    db.Blogs.Add(new Blog { Url = "http://sample.com/blogs/cats" });
                     db.SaveChanges();
                 }
             }
