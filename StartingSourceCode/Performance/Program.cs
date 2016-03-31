@@ -31,14 +31,7 @@ namespace Performance
         {
             using (var db = new EF6.AdventureWorksContext())
             {
-                db.Database.ExecuteSqlCommand(
-                    @"DELETE FROM Production.ProductCategory WHERE Name LIKE 'Test %';
-                      DECLARE @currentMax AS int = (SELECT MAX(ProductCategoryId) FROM [Production].[ProductCategory]);
-                      DBCC CHECKIDENT ('[Production].[ProductCategory]', RESEED, @currentMax);");
-            }
-
-            using (var db = new EF6.AdventureWorksContext())
-            {
+                db.Database.ExecuteSqlCommand(@"DELETE FROM Production.ProductCategory WHERE Name LIKE 'Test %'");
                 db.Customers.FirstOrDefault();
             }
 
