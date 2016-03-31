@@ -17,11 +17,13 @@ namespace FromSql
                 var term = Console.ReadLine();
 
                 // TODO Use TVF for search
-                var blogs = db.Blogs.ToList();
+                var blogs = db.Blogs
+                    .Where(b => b.Url.Contains(term))
+                    .ToList();
 
                 foreach (var blog in blogs)
                 {
-                    Console.WriteLine(blog);
+                    Console.WriteLine(blog.Url);
                 }
             }
         }

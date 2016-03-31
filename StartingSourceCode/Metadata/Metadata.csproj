@@ -126,8 +126,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EF6\Blog.cs" />
     <Compile Include="EF6\BloggingContext.cs" />
+    <Compile Include="EF6\Post.cs" />
+    <Compile Include="EFCore\Blog.cs" />
     <Compile Include="EFCore\BloggingContext.cs" />
+    <Compile Include="EFCore\Post.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

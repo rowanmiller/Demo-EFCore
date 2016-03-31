@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.Entity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,7 +11,11 @@ namespace Conventions
         {
             using (var db = new BloggingContext())
             {
+                Console.WriteLine("Recreating database from current model");
+                Console.WriteLine(" Dropping database...");
                 db.Database.EnsureDeleted();
+
+                Console.WriteLine(" Creating database...");
                 db.Database.EnsureCreated();
             }
         }

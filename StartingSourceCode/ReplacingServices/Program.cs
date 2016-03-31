@@ -23,9 +23,14 @@ namespace ReplacingServices
                 Console.WriteLine($"Mapping for bool: {typeMapper.GetMapping(typeof(bool)).DefaultTypeName}");
                 Console.WriteLine($"Mapping for string: {typeMapper.GetMapping(typeof(string)).DefaultTypeName}");
 
+                Console.WriteLine("Recreating database from current model");
+                Console.WriteLine(" Dropping database...");
                 db.Database.EnsureDeleted();
+                Console.WriteLine(" Creating database...");
                 db.Database.EnsureCreated();
 
+                Console.WriteLine();
+                Console.WriteLine("Inserting a new Blog...");
                 db.Blogs.Add(new Blog
                 {
                     Url = "http://sample.com",
