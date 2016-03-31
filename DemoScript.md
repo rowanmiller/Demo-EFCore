@@ -43,6 +43,9 @@ GO
 
 Required before/after each run thru the demos
 
+* Reset the starting point source code
+ * If you cloned the repo, you can use `git reset --hard` to revert changes
+ * If you downloaded the zip, you should just keep a copy to replace the code you modified during the demo
 * Delete NoteTaker local databases
  * UWP on local machine - open `%LOCALAPPDATA` and search for `Notes.db`, once you find the folder save a shortcut for the future
  * UWP on phone emulator - close the emulator, it's also best to restart it now too so you don't wait for it to bootup during the talk
