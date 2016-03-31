@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoteTaker.Modern", "NoteTak
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoteTaker.Classic", "NoteTaker\NoteTaker.Classic\NoteTaker.Classic.csproj", "{D655F6BF-FDC8-4ADC-B29C-90999D37925E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFCore101", "EFCore101\EFCore101.csproj", "{EBF62078-6C33-4C87-9E8C-9A1EC2384A3B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -202,6 +204,22 @@ Global
 		{D655F6BF-FDC8-4ADC-B29C-90999D37925E}.Release|x64.Build.0 = Release|Any CPU
 		{D655F6BF-FDC8-4ADC-B29C-90999D37925E}.Release|x86.ActiveCfg = Release|Any CPU
 		{D655F6BF-FDC8-4ADC-B29C-90999D37925E}.Release|x86.Build.0 = Release|Any CPU
+		{EBF62078-6C33-4C87-9E8C-9A1EC2384A3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBF62078-6C33-4C87-9E8C-9A1EC2384A3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBF62078-6C33-4C87-9E8C-9A1EC2384A3B}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{EBF62078-6C33-4C87-9E8C-9A1EC2384A3B}.Debug|ARM.Build.0 = Debug|Any CPU
+		{EBF62078-6C33-4C87-9E8C-9A1EC2384A3B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{EBF62078-6C33-4C87-9E8C-9A1EC2384A3B}.Debug|x64.Build.0 = Debug|Any CPU
+		{EBF62078-6C33-4C87-9E8C-9A1EC2384A3B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EBF62078-6C33-4C87-9E8C-9A1EC2384A3B}.Debug|x86.Build.0 = Debug|Any CPU
+		{EBF62078-6C33-4C87-9E8C-9A1EC2384A3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBF62078-6C33-4C87-9E8C-9A1EC2384A3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBF62078-6C33-4C87-9E8C-9A1EC2384A3B}.Release|ARM.ActiveCfg = Release|Any CPU
+		{EBF62078-6C33-4C87-9E8C-9A1EC2384A3B}.Release|ARM.Build.0 = Release|Any CPU
+		{EBF62078-6C33-4C87-9E8C-9A1EC2384A3B}.Release|x64.ActiveCfg = Release|Any CPU
+		{EBF62078-6C33-4C87-9E8C-9A1EC2384A3B}.Release|x64.Build.0 = Release|Any CPU
+		{EBF62078-6C33-4C87-9E8C-9A1EC2384A3B}.Release|x86.ActiveCfg = Release|Any CPU
+		{EBF62078-6C33-4C87-9E8C-9A1EC2384A3B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -50,6 +50,7 @@ Required before/after each run thru the demos
  * UWP on local machine - open `%LOCALAPPDATA` and search for `Notes.db`, once you find the folder save a shortcut for the future
  * UWP on phone emulator - close the emulator, it's also best to restart it now too so you don't wait for it to bootup during the talk
  * WinForms - delete `Notes.db` from bin/debug folder of the `NoteTaker.Classic` project
+* Delete `Demo.EFCore101` database from your LocalDb intsance
 * Run the `FromSql` project so that you have the database and can show the TVF before running the app during the demo
 * Reset the `IDENTITY` column on the table used for `INSERT` performance testing in the `AdventureWorks2014` database
  * You don't need to do this every time, but you may run out of identity values if you run the demo a lot of times without ever doing this
@@ -62,14 +63,48 @@ DBCC CHECKIDENT ('[Production].[ProductCategory]', RESEED, @currentMax);
 * **Optional:** If you want a clean "remote" database for NoteTaker, then either drop it or delete everything from the `Note` table (`DELETE FROM dbo.Note`)
 * **Optional:** Delete `Demo.ReplacingServices` database to avoid waiting for it to be dropped during the demo
 
+# Demo: EF Core 101
+
+* Set `EFCore101` as the startup project.
+* Open `Program.cs` and replace the TODO in `BloggingContext` with the following
+
+```
+protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+{
+    optionsBuilder
+        .UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=Demo.EFCore101;Trusted_Connection=True;");
+}
+```
+
+* Replace the TODO in `Program.Main(..)` with the following code
+
+```
+// Create the database
+db.Database.EnsureCreated();
+
+// Save some data
+var blog = new Blog { Name = "The Dog Blog", Url = "http://sample.com/dogs" };
+db.Blogs.Add(blog);
+db.SaveChanges();
+
+// Query some data
+var blogs = db.Blogs.OrderBy(b => b.Name).ToList();
+foreach (var item in blogs)
+{
+    Console.WriteLine(item.Name);
+}
+```
+
+* Run (Ctrl+F5) and show output
+* Open the database on your LocalDb instance and show the schema (I usually use SQL Server Management Studio)
 
 # Demo: Performance
 
-Set `Performance` as the startup project.
+* Set `Performance` as the startup project.
 
 ## Part 1: Simple Query
 
-Add the following code to both test methods, then run (Ctrl+F5) and show output
+* Add the following code to both test methods, then run (Ctrl+F5) and show output
 
 ```
 db.Customers.ToList
@@ -77,7 +112,7 @@ db.Customers.ToList
 
 ## Part 2: More Complex Query
 
-Add the following code to both test methods, then run (Ctrl+F5) and show output
+* Add the following code to both test methods, then run (Ctrl+F5) and show output
 
 ```
 db.Customers
@@ -91,7 +126,7 @@ db.Customers
 
 ## Part 3: Adding & Saving
 
-Add the following code to both test methods (note you need to change the type that is created), then run (Ctrl+F5) and show output
+* Add the following code to both test methods (note you need to change the type that is created), then run (Ctrl+F5) and show output
 
 ```
 using (var db = new EF6.AdventureWorksContext())
@@ -106,7 +141,7 @@ using (var db = new EF6.AdventureWorksContext())
 
 ## Part 4: Adding & Saving (Optimized EF6 Code)
 
-Change EF6 code to the following, then run (Ctrl+F5) and show output
+* Change EF6 code to the following, then run (Ctrl+F5) and show output
 
 ```
 using (var db = new EF6.AdventureWorksContext())
