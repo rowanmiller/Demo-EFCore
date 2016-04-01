@@ -138,10 +138,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\NoteTaker\Note.cs">
-      <Link>Model\Note.cs</Link>
+      <Link>Properties\Note.cs</Link>
     </Compile>
     <Compile Include="..\NoteTaker\NoteContext.cs">
-      <Link>Model\NoteContext.cs</Link>
+      <Link>Properties\NoteContext.cs</Link>
     </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
