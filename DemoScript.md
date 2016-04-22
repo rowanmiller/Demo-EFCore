@@ -62,6 +62,27 @@ DBCC CHECKIDENT ('[Production].[ProductCategory]', RESEED, @currentMax);
 
 * **Optional:** If you want a clean "remote" database for NoteTaker, then either drop it or delete everything from the `Note` table (`DELETE FROM dbo.Note`)
 * **Optional:** Delete `Demo.ReplacingServices` database to avoid waiting for it to be dropped during the demo
+* 
+
+# Pace Notes
+
+For bigger conferences I keep some rough pace notes so that I have a feel for how the time is going. Here are the pace notes I used for this talk at //build 2016.
+
+| Section                                 | Duration (min) | Running Total  |
+| --------------------------------------- | --------------:| --------------:|
+| Slides: Welcome & Introducing EF Core   |             10 |             10 |
+| Slides: EF Core & EF6.x                 |              3 |             13 |
+| Demo: EF Core 101                       |              5 |             18 |
+| Demo: Performance improvements          |             10 |             28 |
+| Demo: Simplified metadata API           |              3 |             31 |
+| Demo: Extensible core                   |                |                |
+|   Part 1: Consume Services              |              4 |             35 |
+|   Part 2: Replace Services              |              4 |             39 |
+| Demo: Same model, multiple platforms    |              7 |             46 |
+| Demo: Same model, multiple databases    |              5 |             51 |
+| Demo: SQL generation improvements       |                |                |
+|   Part 1: Batching                      |              5 |             56 |
+|   Part 2: FromSql                       |              4 |             60 | 
 
 # Demo: EF Core 101
 
