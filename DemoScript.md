@@ -19,6 +19,9 @@ GO
 CREATE SCHEMA Sales
 GO
 
+CREATE TYPE [dbo].[Name] FROM [nvarchar](50) NULL  
+GO
+
 CREATE TABLE [Production].[ProductCategory](
 	[ProductCategoryID] [int] IDENTITY(1,1) NOT NULL,
 	[Name] [dbo].[Name] NOT NULL,
