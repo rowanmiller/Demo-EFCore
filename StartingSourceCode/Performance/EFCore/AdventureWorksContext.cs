@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using System.Configuration;
 
 namespace Performance.EFCore
 {
@@ -7,8 +8,7 @@ namespace Performance.EFCore
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-            optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=AdventureWorks2014;Trusted_Connection=True;");
+            optionsBuilder.UseSqlServer(ConfigurationManager.ConnectionStrings["AdventureWorks"].ConnectionString);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
