@@ -1,4 +1,4 @@
-﻿using Microsoft.Data.Entity;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
 namespace Batching
@@ -36,7 +36,7 @@ namespace Batching
 
                 if (db.Blogs.Any())
                 {
-                    db.Database.ExecuteSqlCommand("DELETE FROM dbo.Blog");
+                    db.Database.ExecuteSqlCommand("DELETE FROM dbo.Blogs");
                 }
 
                 db.Blogs.Add(new Blog { Name = "The Dog Blog", Url = "http://sample.com/dogs" });
@@ -52,9 +52,9 @@ namespace Batching
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder
-                .UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=Demo.Batching;Trusted_Connection=True;")
-                .MaxBatchSize(2);
+            optionsBuilder.UseSqlServer(
+                @"Server=(localdb)\mssqllocaldb;Database=Demo.Batching;Trusted_Connection=True;",
+                options => options.MaxBatchSize(2));
         }
     }
 

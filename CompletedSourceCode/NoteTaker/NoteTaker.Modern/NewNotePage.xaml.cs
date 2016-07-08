@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 

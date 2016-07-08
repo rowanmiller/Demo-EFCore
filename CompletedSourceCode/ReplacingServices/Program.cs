@@ -1,7 +1,7 @@
-﻿using Microsoft.Data.Entity;
-using Microsoft.Data.Entity.Infrastructure;
-using Microsoft.Data.Entity.Storage;
-using Microsoft.Data.Entity.Storage.Internal;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.EntityFrameworkCore.Storage.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
@@ -14,19 +14,22 @@ namespace ReplacingServices
             var serviceCollection = new ServiceCollection();
 
             serviceCollection
-                .AddEntityFramework()
-                .AddSqlServer();
+                .AddEntityFrameworkSqlServer();
 
             serviceCollection.AddSingleton<SqlServerTypeMapper, CustomSqlServerTypeMapper>();
 
-            using (var db = new BloggingContext(serviceCollection.BuildServiceProvider()))
+            var options = new DbContextOptionsBuilder()
+                .UseInternalServiceProvider(serviceCollection.BuildServiceProvider())
+                .Options;
+
+            using (var db = new BloggingContext(options))
             {
                 var serviceProvider = db.GetInfrastructure<IServiceProvider>();
                 var typeMapper = serviceProvider.GetService<IRelationalTypeMapper>();
 
                 Console.WriteLine($"Type mapper in use: {typeMapper.GetType().Name}");
-                Console.WriteLine($"Mapping for bool: {typeMapper.GetMapping(typeof(bool)).DefaultTypeName}");
-                Console.WriteLine($"Mapping for string: {typeMapper.GetMapping(typeof(string)).DefaultTypeName}");
+                Console.WriteLine($"Mapping for bool: {typeMapper.GetMapping(typeof(bool)).StoreType}");
+                Console.WriteLine($"Mapping for string: {typeMapper.GetMapping(typeof(string)).StoreType}");
 
                 db.Database.EnsureDeleted();
                 db.Database.EnsureCreated();
@@ -44,8 +47,8 @@ namespace ReplacingServices
 
     public class BloggingContext : DbContext
     {
-        public BloggingContext(IServiceProvider serviceProvider)
-            : base(serviceProvider)
+        public BloggingContext(DbContextOptions options)
+            : base(options)
         { }
 
         public DbSet<Blog> Blogs { get; set; }
