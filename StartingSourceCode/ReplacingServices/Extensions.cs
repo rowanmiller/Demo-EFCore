@@ -1,4 +1,4 @@
-﻿using Microsoft.Data.Entity.Metadata;
+﻿using Microsoft.EntityFrameworkCore.Metadata;
 using System;
 using System.Linq;
 

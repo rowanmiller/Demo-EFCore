@@ -1,8 +1,7 @@
 ﻿{
   "dependencies": {
-    "EntityFramework.Sqlite": "7.0.0-rc1-final",
-    "Microsoft.NETCore.UniversalWindowsPlatform": "5.1.0",
-    "System.Runtime": "4.0.21-beta-23225"
+    "Microsoft.EntityFrameworkCore.Sqlite": "1.0.0",
+    "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.0"
   },
   "frameworks": {
     "uap10.0": { }

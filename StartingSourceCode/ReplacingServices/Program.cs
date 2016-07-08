@@ -1,7 +1,7 @@
-﻿using Microsoft.Data.Entity;
-using Microsoft.Data.Entity.Infrastructure;
-using Microsoft.Data.Entity.Storage;
-using Microsoft.Data.Entity.Storage.Internal;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.EntityFrameworkCore.Storage.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
@@ -20,8 +20,8 @@ namespace ReplacingServices
                 var typeMapper = serviceProvider.GetService<IRelationalTypeMapper>();
 
                 Console.WriteLine($"Type mapper in use: {typeMapper.GetType().Name}");
-                Console.WriteLine($"Mapping for bool: {typeMapper.GetMapping(typeof(bool)).DefaultTypeName}");
-                Console.WriteLine($"Mapping for string: {typeMapper.GetMapping(typeof(string)).DefaultTypeName}");
+                Console.WriteLine($"Mapping for bool: {typeMapper.GetMapping(typeof(bool)).StoreType}");
+                Console.WriteLine($"Mapping for string: {typeMapper.GetMapping(typeof(string)).StoreType}");
 
                 Console.WriteLine("Recreating database from current model");
                 Console.WriteLine(" Dropping database...");

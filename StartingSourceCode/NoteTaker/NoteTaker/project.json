@@ -8,8 +8,7 @@
     }
   },
   "dependencies": {
-    "EntityFramework.Core": "7.0.0-rc1-final",
-    "EntityFramework.Sqlite": "7.0.0-rc1-final",
+    "Microsoft.EntityFrameworkCore.Sqlite": "1.0.0",
     "Microsoft.NETCore": "5.0.0"
   }
 }
