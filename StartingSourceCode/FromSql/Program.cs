@@ -34,7 +34,7 @@ namespace FromSql
             {
                 if (db.Database.EnsureCreated())
                 {
-                    db.Database.ExecuteSqlCommand("CREATE FUNCTION [dbo].[SearchBlogs] (@term nvarchar(200)) RETURNS TABLE AS RETURN (SELECT * FROM dbo.Blog WHERE Url LIKE '%' + @term + '%')");
+                    db.Database.ExecuteSqlCommand("CREATE FUNCTION [dbo].[SearchBlogs] (@term nvarchar(200)) RETURNS TABLE AS RETURN (SELECT * FROM dbo.Blogs WHERE Url LIKE '%' + @term + '%')");
 
                     db.Blogs.Add(new Blog { Url = "http://sample.com/blogs/fish" });
                     db.Blogs.Add(new Blog { Url = "http://sample.com/blogs/catfish" });
