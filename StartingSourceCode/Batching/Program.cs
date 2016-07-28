@@ -36,7 +36,7 @@ namespace Batching
 
                 if (db.Blogs.Any())
                 {
-                    db.Database.ExecuteSqlCommand("DELETE FROM dbo.Blog");
+                    db.Database.ExecuteSqlCommand("DELETE FROM dbo.Blogs");
                 }
 
                 db.Blogs.Add(new Blog { Name = "The Dog Blog", Url = "http://sample.com/dogs" });
