@@ -284,6 +284,16 @@ using (var db = new NoteContext())
 ```
 
 * Show the code behind `ExistingNotesPage.xaml`
+* Open the code behind for App.xaml
+* Replace the TODO with the following code
+
+``` 
+using (var db = new NoteContext())
+{
+    db.Database.EnsureCreated();
+}
+```
+
 * Run the app and show that notes are saved and queried
 * **Optional:** open up the folder for the app and show the `Notes.db` file on disk
 * **Optional:** swap to deploy to the phone emulator and show the app working there
