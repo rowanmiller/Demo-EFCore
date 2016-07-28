@@ -210,8 +210,8 @@ var serviceProvider = db.GetInfrastructure<IServiceProvider>();
 var typeMapper = serviceProvider.GetService<IRelationalTypeMapper>();
 
 Console.WriteLine($"Type mapper in use: {typeMapper.GetType().Name}");
-Console.WriteLine($"Mapping for bool: {typeMapper.GetMapping(typeof(bool)).DefaultTypeName}");
-Console.WriteLine($"Mapping for string: {typeMapper.GetMapping(typeof(string)).DefaultTypeName}");
+Console.WriteLine($"Mapping for bool: {typeMapper.GetMapping(typeof(bool)).StoreType}");
+Console.WriteLine($"Mapping for string: {typeMapper.GetMapping(typeof(string)).StoreType}");
 ```
 
 * Run (Ctrl+F5) and show output
@@ -230,11 +230,11 @@ if (property.HasClrAttribute<XmlAttribute>())
 }
 ```
 
-* Add a constructor to `BloggingContext` that passes in an external service provider
+* Add a constructor to `BloggingContext` that passes in an external options
 
 ```
-public BloggingContext(IServiceProvider serviceProvider)
-    : base(serviceProvider)
+public BloggingContext(DbContextOptions options)
+    : base(options)
 { }
 ```
 
@@ -244,12 +244,15 @@ public BloggingContext(IServiceProvider serviceProvider)
 var serviceCollection = new ServiceCollection();
 
 serviceCollection
-    .AddEntityFramework()
-    .AddSqlServer();
+    .AddEntityFrameworkSqlServer();
 
 serviceCollection.AddSingleton<SqlServerTypeMapper, CustomSqlServerTypeMapper>();
 
-using (var db = new BloggingContext(serviceCollection.BuildServiceProvider()))
+var options = new DbContextOptionsBuilder()
+    .UseInternalServiceProvider(serviceCollection.BuildServiceProvider())
+    .Options;
+
+using (var db = new BloggingContext(options))
 {
     ...
 ```
@@ -371,7 +374,14 @@ using (var db = new NoteContext(options))
 * Run the app
 * Show that all changes were persisted in a single command
 
-* In `BloggingContext.OnConfiguring(..)` append `.MaxBatchSize(5)` after the call to `UseSqlServer(..)`
+* In `BloggingContext.OnConfiguring(..)` set a maximum batch size
+
+  ```c#
+  optionsBuilder.UseSqlServer(
+    @"Server=(localdb)\mssqllocaldb;Database=Demo.Batching;Trusted_Connection=True;",
+    options => options.MaxBatchSize(4));
+  ```
+
 * Run the app and show that two commands are sent to the database
 
 * **Optional:** Use the performance demo to show how much difference batching makes against a high-latency database
