@@ -79,13 +79,13 @@ For bigger conferences I keep some rough pace notes so that I have a feel for ho
 | Demo: Performance improvements          |             10 |             28 |
 | Demo: Simplified metadata API           |              3 |             31 |
 | Demo: Extensible core                   |                |                |
-|   Part 1: Consume Services              |              4 |             35 |
-|   Part 2: Replace Services              |              4 |             39 |
+| - Part 1: Consume Services              |              4 |             35 |
+| - Part 2: Replace Services              |              4 |             39 |
 | Demo: Same model, multiple platforms    |              7 |             46 |
 | Demo: Same model, multiple databases    |              5 |             51 |
 | Demo: SQL generation improvements       |                |                |
-|   Part 1: Batching                      |              5 |             56 |
-|   Part 2: FromSql                       |              4 |             60 | 
+| - Part 1: Batching                      |              5 |             56 |
+| - Part 2: FromSql                       |              4 |             60 | 
 
 # Demo: EF Core 101
 
@@ -421,3 +421,85 @@ var blogs = db.Blogs.FromSql("SELECT * FROM dbo.SearchBlogs(@p0)", term)
 ```
 
 * Run the app and show that the original SQL is composed upon
+
+# Demo: Field Mapping
+
+## Part 1: Readonly Property with Backing Field
+
+* Set `FieldMapping` as the startup project
+* Open `Program.cs` and show the `Blog` class - highligh that `Url` is a readonly property that EF will ignore
+* **Optional:** Run the app and show that `Url` is not in the database
+* Add the following line of code in `BloggingContext.OnModelCreating(...)`
+
+```
+modelBuilder.Entity<Blog>()
+    .Property(b => b.Url);
+```
+
+* Discuss that EF will find the `_url` field by convention and use it to set the propety value when creating instances
+* Show the `.HasField(...)` method that chains off `.Property(...)` for when the field name doesn't match EF conventions
+* Run the app and show that `Url` is now in the database
+* **Optional:** Show that `.UsePropertyAccessMode(...)` method that chains of `.Property(...)` in `OnModelCreating(...)` (can be used to force always using the field, etc.)
+
+## Part 2: Field-Only
+
+* Remove the `Blog.Url` property and add a set method
+
+```
+public string GetUrl()
+{
+    return _url.ToLower();
+}
+```
+
+* Change OnModelCreating to specify the field name
+
+```
+modelBuilder.Entity<Blog>()
+    .Property("_url");
+```
+
+* Change the query in `Main(...)` to use `EF.Property(...)`
+
+```
+var blogs = db.Blogs
+    .OrderBy(b => EF.Property<string>(b, "_url"))
+    .ToList();
+```
+
+* Run the app and show that everything works
+
+## Part 3: Custom Property Name
+
+* Update `OnModelCreating(...)` code to specify a name for the property in metadata
+
+```
+modelBuilder.Entity<Blog>()
+    .Property("Url")
+    .HasField("_url");
+```
+
+* Change `Main(...)` to use the property name
+
+```
+var blogs = db.Blogs
+    .OrderBy(b => EF.Property<string>(b, "Url"))
+    .ToList();
+```
+
+* Run the app and show that everything works
+
+# Demo: Memory-Optimized Tables
+
+**CAUTION: This demo is sensitive to the specific hardware it is being run on. This is especially true when run on a laptop, which will get CPU bound a lot quicker than a real database server. You should run it several times to ensure you get good results, and you may need to tweak the amount of data being inserted etc.**
+
+* Set `MemoryOptimizedTables` as the startup project
+* Open `Program.cs` and walkthough the code quickly (the main point is that there is a lot of concurrent access to the head of the table)
+* Run the app for ~30sec and call out the throughput of the database
+* Add the following line of code in `BloggingContext.OnModelCreating(...)`
+
+```
+modelBuilder.Entity<SensorRead>().ForSqlServerIsMemoryOptimized();
+```
+
+* Run the app for ~30sec and show improved throughput of the database
