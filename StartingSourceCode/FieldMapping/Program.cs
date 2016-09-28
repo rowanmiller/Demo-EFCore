@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using System.Linq;
 using System.Net.Http;
 
@@ -14,10 +15,14 @@ namespace FieldMapping
             {
                 var blog = new Blog();
                 blog.Name = "Rowan's Blog";
-                blog.Url = "http://romiller.com";
+                blog.SetUrl("http://romiller.com");
 
                 db.Blogs.Add(blog);
                 db.SaveChanges();
+
+                var blogs = db.Blogs
+                    .OrderBy(b => b.Url)
+                    .ToList();
             }
         }
 
@@ -49,8 +54,25 @@ namespace FieldMapping
 
     public class Blog
     {
+        private string _url;
+
         public int BlogId { get; set; }
         public string Name { get; set; }
-        public string Url { get; set; }
+
+        public string Url
+        {
+            get { return _url; }
+        }
+
+        public void SetUrl(string url)
+        {
+            using (var client = new HttpClient())
+            {
+                var response = client.GetAsync(url).Result;
+                response.EnsureSuccessStatusCode();
+            }
+
+            _url = url;
+        }
     }
 }
