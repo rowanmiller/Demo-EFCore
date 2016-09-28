@@ -13,11 +13,18 @@ namespace MemoryOptimizedTables
             SetupDatabase();
 
             var cancellationTokenSource = new CancellationTokenSource();
-            var workerThreads = new List<Thread>()
+            var workerThreads = new List<Thread>
             {
-                new Thread(() => MonitorSensor("Temperature", cancellationTokenSource.Token)),
+                new Thread(() => MonitorSensor("Air Temperature", cancellationTokenSource.Token)),
                 new Thread(() => MonitorSensor("Humidity", cancellationTokenSource.Token)),
                 new Thread(() => MonitorSensor("Air Pressure", cancellationTokenSource.Token)),
+                new Thread(() => MonitorSensor("Oxygen", cancellationTokenSource.Token)),
+                new Thread(() => MonitorSensor("Carbon Dioxide", cancellationTokenSource.Token)),
+                new Thread(() => MonitorSensor("Wind Speed", cancellationTokenSource.Token)),
+                new Thread(() => MonitorSensor("Wind Chill Factor", cancellationTokenSource.Token)),
+                new Thread(() => MonitorSensor("Ground Temperature", cancellationTokenSource.Token)),
+                new Thread(() => MonitorSensor("Light Level", cancellationTokenSource.Token)),
+                new Thread(() => MonitorSensor("Decibels", cancellationTokenSource.Token)),
                 new Thread(() => MonitorDatabase(cancellationTokenSource.Token))
             };
 
@@ -36,39 +43,59 @@ namespace MemoryOptimizedTables
             }
         }
 
+
         private static void MonitorSensor(string sensorId, CancellationToken cancellationToken)
         {
             var sequenceNo = 0;
 
             while (!cancellationToken.IsCancellationRequested)
             {
-
                 using (var db = new BloggingContext())
                 {
-                    using (var t = db.Database.BeginTransaction())
-                    {
-                        var ids = new int[200];
-                        var comments = new SensorRead[ids.Length];
-                        for (int i = 0; i < ids.Length; i++)
-                        {
-                            ids[i] = sequenceNo;
-                            sequenceNo++;
-                            comments[i] = new SensorRead { SensorId = sensorId, SequenceNo = ids[i], Value = 0 };
-                        }
+                    var data = CreateSomeFakeSensorReads(sensorId, sequenceNo, 100);
+                    sequenceNo += 100;
 
-                        db.SensorReads.AddRange(comments);
+                    using (var transaction = db.Database.BeginTransaction())
+                    {
+                        db.SensorReads.AddRange(data);
                         db.SaveChanges();
 
+                        var ids = data.Select(s => s.SequenceNo).ToArray(); ;
                         db.SensorReads
                             .AsNoTracking()
                             .OrderByDescending(s => s.SequenceNo)
                             .Where(c => c.SensorId == sensorId && ids.Contains(c.SequenceNo))
                             .ToList();
 
-                        t.Commit();
+                        transaction.Commit();
                     }
                 }
             }
+        }
+
+        private static SensorRead[] CreateSomeFakeSensorReads(string sensorId, int startSequence, int count)
+        {
+            var sequenceNo = startSequence;
+            var random = new Random();
+
+            var data = new SensorRead[count];
+            for (int i = 0; i < count; i++)
+            {
+                data[i] = new SensorRead
+                {
+                    SensorId = sensorId,
+                    SequenceNo = sequenceNo,
+                    Value = random.Next(),
+                    UtcTime = DateTime.UtcNow,
+                    LocalTime = DateTime.Now,
+                    TimeCode = DateTime.UtcNow.Ticks,
+                    StatusCode = sequenceNo
+                };
+
+                sequenceNo++;
+            }
+
+            return data;
         }
 
         private static void MonitorDatabase(object threadParams)
@@ -128,6 +155,13 @@ namespace MemoryOptimizedTables
         {
             modelBuilder.Entity<SensorRead>().HasKey(c => new { c.SensorId, c.SequenceNo });
 
+            modelBuilder.Entity<SensorRead>().HasIndex(r => r.SequenceNo);
+            modelBuilder.Entity<SensorRead>().HasIndex(r => r.Value);
+            modelBuilder.Entity<SensorRead>().HasIndex(r => r.UtcTime);
+            modelBuilder.Entity<SensorRead>().HasIndex(r => r.LocalTime);
+            modelBuilder.Entity<SensorRead>().HasIndex(r => r.TimeCode);
+            modelBuilder.Entity<SensorRead>().HasIndex(r => r.StatusCode);
+
 
         }
     }
@@ -137,5 +171,9 @@ namespace MemoryOptimizedTables
         public string SensorId { get; set; }
         public int SequenceNo { get; set; }
         public double Value { get; set; }
+        public DateTime UtcTime { get; set; }
+        public DateTime LocalTime { get; set; }
+        public long TimeCode { get; set; }
+        public int StatusCode { get; set; }
     }
 }
