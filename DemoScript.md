@@ -10,6 +10,7 @@ Required once on a machine to get it ready for these demos
 * Install SQL Server Management Studio
 * Clone this repository to your local machine (or [download the source code zip](https://github.com/rowanmiller/Demo-EFCore/archive/master.zip) and extract it)
 * Add the [AdventureWorks2014 sample database](https://msftdbprodsamples.codeplex.com/releases/view/125550) to you LocalDb instance (`(localdb)\mssqllocaldb`)
+* **Optional:** If you want to do the memory-optimized table demo, then you need to have a SQL Server 2016 instance available. By default the code will try to use `localhost\SQL2016`, but you can change this.
 * **Optional:** If you want to show the performance impact of SaveChanges batching against a high-latency database, then create an AdventureWorks2014 database on an SQL Azure instance. Run the following script to create the required schema.
 
 ```
