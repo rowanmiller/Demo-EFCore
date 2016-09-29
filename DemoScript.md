@@ -79,14 +79,14 @@ For bigger conferences I keep some rough pace notes so that I have a feel for ho
 | Demo: EF Core 101                       |              5 |             18 |
 | Demo: Performance improvements          |             10 |             28 |
 | Demo: Simplified metadata API           |              3 |             31 |
-| Demo: Extensible core                   |                |                |
-| - Part 1: Consume Services              |              4 |             35 |
-| - Part 2: Replace Services              |              4 |             39 |
+| Demo: Consuming Services                |              4 |             35 |
+| Demo: Replacing Services                |              4 |             39 |
 | Demo: Same model, multiple platforms    |              7 |             46 |
 | Demo: Same model, multiple databases    |              5 |             51 |
 | Demo: SQL generation improvements       |                |                |
 | - Part 1: Batching                      |              5 |             56 |
 | - Part 2: FromSql                       |              4 |             60 | 
+
 
 # Demo: EF Core 101
 
@@ -197,69 +197,6 @@ foreach (var entity in db.Model.GetEntityTypes())
 ```
 
 * Run (Ctrl+F5) and show output
-
-
-# Demo: Extensible Core
-
-## Part 1: Consuming Services
-
-* Set `ConsumingServices` as the startup project
-* Update the `Main` method with the following code
-
-```
-var serviceProvider = db.GetInfrastructure<IServiceProvider>();
-var typeMapper = serviceProvider.GetService<IRelationalTypeMapper>();
-
-Console.WriteLine($"Type mapper in use: {typeMapper.GetType().Name}");
-Console.WriteLine($"Mapping for bool: {typeMapper.GetMapping(typeof(bool)).StoreType}");
-Console.WriteLine($"Mapping for string: {typeMapper.GetMapping(typeof(string)).StoreType}");
-```
-
-* Run (Ctrl+F5) and show output
-
-## Part 2: Replacing Services
-
-* Set `ReplacingServices` as the startup project
-* Show `Blog.Metadata` with the custom `[Xml]` attribute
-* Open `CustomSqlServerTypeMapper`
-* Replace the TODO in `GetMapping(IProperty property)` with the following code
-
-```
-if (property.HasClrAttribute<XmlAttribute>())
-{
-    return _xml;
-}
-```
-
-* Add a constructor to `BloggingContext` that passes in an external options
-
-```
-public BloggingContext(DbContextOptions options)
-    : base(options)
-{ }
-```
-
-* Replace the TODO in `Main` with the following code
-
-```
-var serviceCollection = new ServiceCollection();
-
-serviceCollection
-    .AddEntityFrameworkSqlServer();
-
-serviceCollection.AddSingleton<SqlServerTypeMapper, CustomSqlServerTypeMapper>();
-
-var options = new DbContextOptionsBuilder()
-    .UseInternalServiceProvider(serviceCollection.BuildServiceProvider())
-    .Options;
-
-using (var db = new BloggingContext(options))
-{
-    ...
-```
-
-* Run (Ctrl+F5) and show output
-* Open the database on your LocalDb instance and show the xml column in the table (I usually use SQL Server Management Studio)
 
 
 # Demo: Same Model, Different Platforms
@@ -423,7 +360,70 @@ var blogs = db.Blogs.FromSql("SELECT * FROM dbo.SearchBlogs(@p0)", term)
 
 * Run the app and show that the original SQL is composed upon
 
-# Demo: Field Mapping
+
+# Demo: Consuming Services
+
+* Set `ConsumingServices` as the startup project
+* Update the `Main` method with the following code
+
+```
+var serviceProvider = db.GetInfrastructure<IServiceProvider>();
+var typeMapper = serviceProvider.GetService<IRelationalTypeMapper>();
+
+Console.WriteLine($"Type mapper in use: {typeMapper.GetType().Name}");
+Console.WriteLine($"Mapping for bool: {typeMapper.GetMapping(typeof(bool)).StoreType}");
+Console.WriteLine($"Mapping for string: {typeMapper.GetMapping(typeof(string)).StoreType}");
+```
+
+* Run (Ctrl+F5) and show output
+
+
+# Demo: Replacing Services (Uses EF Core 1.1)
+
+* Set `ReplacingServices` as the startup project
+* Show `Blog.Metadata` with the custom `[Xml]` attribute
+* Open `CustomSqlServerTypeMapper`
+* Replace the TODO in `GetMapping(IProperty property)` with the following code
+
+```
+if (property.HasClrAttribute<XmlAttribute>())
+{
+    return _xml;
+}
+```
+
+* Add a constructor to `BloggingContext` that passes in an external options
+
+```
+public BloggingContext(DbContextOptions options)
+    : base(options)
+{ }
+```
+
+* Replace the TODO in `Main` with the following code
+
+```
+var serviceCollection = new ServiceCollection();
+
+serviceCollection
+    .AddEntityFrameworkSqlServer();
+
+serviceCollection.AddSingleton<SqlServerTypeMapper, CustomSqlServerTypeMapper>();
+
+var options = new DbContextOptionsBuilder()
+    .UseInternalServiceProvider(serviceCollection.BuildServiceProvider())
+    .Options;
+
+using (var db = new BloggingContext(options))
+{
+    ...
+```
+
+* Run (Ctrl+F5) and show output
+* Open the database on your LocalDb instance and show the xml column in the table (I usually use SQL Server Management Studio)
+
+
+# Demo: Field Mapping (Uses EF Core 1.1)
 
 ## Part 1: Readonly Property with Backing Field
 
@@ -490,7 +490,7 @@ var blogs = db.Blogs
 
 * Run the app and show that everything works
 
-# Demo: Memory-Optimized Tables
+# Demo: Memory-Optimized Tables (Uses EF Core 1.1)
 
 **CAUTION: This demo is sensitive to the specific hardware it is being run on. This is especially true when run on a laptop, which will get CPU bound a lot quicker than a real database server. You should run it several times to ensure you get good results, and you may need to tweak the amount of data being inserted etc.**
 
