@@ -10,8 +10,13 @@ namespace EFCore101
         {
             using (var db = new BloggingContext())
             {
-                // TODO Do some data access
+                // TODO Create the database
+
+
+                // TODO Save data
                 var blog = new Blog { Name = "The Dog Blog", Url = "http://sample.com/dogs" };
+
+                // TODO Query data
 
             }
         }

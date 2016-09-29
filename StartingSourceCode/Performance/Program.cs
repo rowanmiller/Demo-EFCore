@@ -18,7 +18,7 @@ namespace Performance
                         
                     }
                 },
-                ef7Test: () =>
+                efCoreTest: () =>
                 {
                     using (var db = new EFCore.AdventureWorksContext())
                     {
@@ -41,7 +41,7 @@ namespace Performance
             }
         }
 
-        private static void RunTest(Action ef6Test, Action ef7Test)
+        private static void RunTest(Action ef6Test, Action efCoreTest)
         {
             var stopwatch = new Stopwatch();
             for (int iteration = 0; iteration < 3; iteration++)
@@ -55,7 +55,7 @@ namespace Performance
                 Console.WriteLine($"  - EF6.x:      {ef6.ToString().PadLeft(4)}ms");
 
                 stopwatch.Restart();
-                ef7Test();
+                efCoreTest();
                 stopwatch.Stop();
                 var efCore = stopwatch.ElapsedMilliseconds;
                 Console.WriteLine($"  - EF Core:    {efCore.ToString().PadLeft(4)}ms");
