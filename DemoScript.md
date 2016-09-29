@@ -183,6 +183,35 @@ using (var db = new EF6.AdventureWorksContext())
 ```
 
 
+# Demo: Model Building Pipeline Improvements
+
+* Set `Conventions` as the startup project.
+* Implement `BloggingContext.OnModelCreating(...)` with the following code
+
+```
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    foreach (var entity in modelBuilder.Model.GetEntityTypes())
+    {
+        entity.Relational().TableName = "tbl_" + entity.ClrType.Name.ToLower();
+
+        foreach (var property in entity.GetProperties().Where(p => p.ClrType == typeof(string)))
+        {
+            property.SetMaxLength(200);
+        }
+
+        foreach (var fk in entity.GetForeignKeys())
+        {
+            fk.Relational().Name = fk.Relational().Name.ToLower();
+        }
+    }
+}
+```
+
+* Run the app
+* Open the database and show that the conventions were applied
+
+
 # Demo: Simplified Metadata API
 
 * Set `Metadata` as the startup project.
