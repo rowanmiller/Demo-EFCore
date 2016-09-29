@@ -11,13 +11,9 @@ namespace ReplacingServices
     {
         static void Main(string[] args)
         {
-            // TODO Create a ServiceProvider with our custom type mapper
-
-
             using (var db = new BloggingContext())
             {
-                var serviceProvider = db.GetInfrastructure<IServiceProvider>();
-                var typeMapper = serviceProvider.GetService<IRelationalTypeMapper>();
+                var typeMapper = db.GetService<IRelationalTypeMapper>();
 
                 Console.WriteLine($"Type mapper in use: {typeMapper.GetType().Name}");
                 Console.WriteLine($"Mapping for bool: {typeMapper.GetMapping(typeof(bool)).StoreType}");
@@ -44,13 +40,14 @@ namespace ReplacingServices
 
     public class BloggingContext : DbContext
     {
-        // TODO Add constructor to allow external ServiceProvider
-        
         public DbSet<Blog> Blogs { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=Demo.ReplacingServices;Trusted_Connection=True;");
+
+            // TODO Register our custom type mapper
+
         }
     }
 
