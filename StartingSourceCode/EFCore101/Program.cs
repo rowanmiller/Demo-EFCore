@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
 namespace EFCore101
@@ -25,6 +27,7 @@ namespace EFCore101
     public class BloggingContext : DbContext
     {
         public DbSet<Blog> Blogs { get; set; }
+        public DbSet<Post> Posts { get; set; }
 
         // TODO Setup the database to connect to
     }
@@ -34,5 +37,17 @@ namespace EFCore101
         public int BlogId { get; set; }
         public string Name { get; set; }
         public string Url { get; set; }
+
+        public List<Post> Posts { get; set; }
+    }
+
+    public class Post
+    {
+        public int PostId { get; set; }
+        public string Title { get; set; }
+        public string Content { get; set; }
+
+        public int BlogId { get; set; }
+        public Blog Blog { get; set; }
     }
 }
