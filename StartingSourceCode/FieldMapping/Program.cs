@@ -20,10 +20,19 @@ namespace FieldMapping
 
                 db.Blogs.Add(blog);
                 db.SaveChanges();
+            }
 
+            using (var db = new BloggingContext())
+            {
                 var blogs = db.Blogs
                     .OrderBy(b => b.Url)
                     .ToList();
+
+                Console.WriteLine("All blogs:");
+                foreach (var item in blogs)
+                {
+                    Console.WriteLine($" * {item.Name} | {item.Url}");
+                }
             }
         }
 
@@ -37,6 +46,7 @@ namespace FieldMapping
 
                 Console.WriteLine(" Creating database...");
                 db.Database.EnsureCreated();
+                Console.WriteLine();
             }
         }
     }
