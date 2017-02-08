@@ -66,7 +66,7 @@ DBCC CHECKIDENT ('[Production].[ProductCategory]', RESEED, @currentMax);
 
 * **Optional:** If you want a clean "remote" database for NoteTaker, then either drop it or delete everything from the `Note` table (`DELETE FROM dbo.Note`)
 * **Optional:** Delete `Demo.ReplacingServices` database to avoid waiting for it to be dropped during the demo
-* 
+*
 
 # Pace Notes
 
@@ -79,14 +79,29 @@ For bigger conferences I keep some rough pace notes so that I have a feel for ho
 | Demo: EF Core 101                       |              5 |             18 |
 | Demo: Performance improvements          |             10 |             28 |
 | Demo: Simplified metadata API           |              3 |             31 |
-| Demo: Consuming Services                |              4 |             35 |
-| Demo: Replacing Services                |              4 |             39 |
+| Demo: Extensible Services               |                |                |
+| - Part 1: Consuming Services            |              4 |             35 |
+| - Part 2: Replacing Services            |              4 |             39 |
 | Demo: Same model, multiple platforms    |              7 |             46 |
 | Demo: Same model, multiple databases    |              5 |             51 |
 | Demo: SQL generation improvements       |                |                |
 | - Part 1: Batching                      |              5 |             56 |
-| - Part 2: FromSql                       |              4 |             60 | 
+| - Part 2: FromSql                       |              4 |             60 |
 
+# Demo Catalog
+
+There are more demos here than fit in a typical talk, so you can pick and choose the best ones for your session.
+
+* [Demo: EF Core 101](#demo-ef-core-101)
+* [Demo: Performance](#demo-performance)
+* [Demo: Model Building Pipeline Improvements](#demo-model-building-pipeline-improvements)
+* [Demo: Simplified Metadata API](#demo-simplified-metadata-api)
+* [Demo: Same Model, Different Platforms](#demo-same-model-different-platforms)
+* [Demo: Same Model, Different Databases](#demo-same-model-different-databases)
+* [Demo: SQL Generation Improvements](#demo-sql-generation-improvements)
+* [Demo: Extensible Services](#demo-extensible-services)
+* [Demo: Field Mapping](#demo-field-mapping)
+* [Demo: Memory-Optimized Tables](#demo-memory-optimized-tables)
 
 # Demo: EF Core 101
 
@@ -254,7 +269,7 @@ using (var db = new NoteContext())
 * Open the code behind for App.xaml
 * Replace the TODO with the following code
 
-``` 
+```
 using (var db = new NoteContext())
 {
     db.Database.EnsureCreated();
@@ -390,7 +405,9 @@ var blogs = db.Blogs.FromSql("SELECT * FROM dbo.SearchBlogs(@p0)", term)
 * Run the app and show that the original SQL is composed upon
 
 
-# Demo: Consuming Services
+# Demo: Extensible Services
+
+## Part 1: ConsumingServices
 
 * Set `ConsumingServices` as the startup project
 * Update the `Main` method with the following code
@@ -407,7 +424,7 @@ Console.WriteLine($"Mapping for string: {typeMapper.GetMapping(typeof(string)).S
 * Run (Ctrl+F5) and show output
 
 
-# Demo: Replacing Services (Uses EF Core 1.1)
+## Part 2: Replacing Services
 
 * Set `ReplacingServices` as the startup project
 * Show `Blog.Metadata` with the custom `[Xml]` attribute
@@ -452,7 +469,7 @@ using (var db = new BloggingContext(options))
 * Open the database on your LocalDb instance and show the xml column in the table (I usually use SQL Server Management Studio)
 
 
-# Demo: Field Mapping (Uses EF Core 1.1)
+# Demo: Field Mapping
 
 ## Part 1: Readonly Property with Backing Field
 
@@ -519,7 +536,7 @@ var blogs = db.Blogs
 
 * Run the app and show that everything works
 
-# Demo: Memory-Optimized Tables (Uses EF Core 1.1)
+# Demo: Memory-Optimized Tables
 
 **CAUTION: This demo is sensitive to the specific hardware it is being run on. This is especially true when run on a laptop, which will get CPU bound a lot quicker than a real database server. You should run it several times to ensure you get good results, and you may need to tweak the amount of data being inserted etc.**
 
