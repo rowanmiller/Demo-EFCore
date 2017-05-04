@@ -48,7 +48,7 @@ namespace FieldMapping
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder
-                .UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=Demo.FieldMapping;Trusted_Connection=True;");
+                .UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=Demo.FieldMapping;Trusted_Connection=True;ConnectRetryCount=0;");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

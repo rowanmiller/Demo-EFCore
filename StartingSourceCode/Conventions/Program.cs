@@ -28,7 +28,7 @@ namespace Conventions
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=Demo.Conventions;Trusted_Connection=True;");
+            optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=Demo.Conventions;Trusted_Connection=True;ConnectRetryCount=0;");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
