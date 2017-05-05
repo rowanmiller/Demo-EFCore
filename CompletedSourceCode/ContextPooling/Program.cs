@@ -20,8 +20,9 @@ namespace ContextPooling
         {
             var serviceProvider = new ServiceCollection()
                 .AddEntityFrameworkSqlServer()
-                .AddDbContext<BloggingContext>(
-                    c => c.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=Demo.ContextPooling;Trusted_Connection=True;ConnectRetryCount=0;"))
+                .AddDbContextPool<BloggingContext>(
+                    c => c.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=Demo.ContextPooling;Trusted_Connection=True;ConnectRetryCount=0;"),
+                    poolSize: 16)
                 .BuildServiceProvider();
 
             SetupDatabase(serviceProvider);

@@ -29,7 +29,16 @@ namespace CompiledQueries
                 },
                 compiledTest: (accountNumbers) =>
                 {
-                    // TODO Implement compiled query version
+                    var query = EF.CompileQuery((AdventureWorksContext db, string accountNumber) =>
+                        db.Customers.Single(c => c.AccountNumber == accountNumber));
+
+                    using (var db = new AdventureWorksContext())
+                    {
+                        foreach (var accountNumber in accountNumbers)
+                        {
+                            var customer = query(db, accountNumber);
+                        }
+                    }
                 });
         }
 

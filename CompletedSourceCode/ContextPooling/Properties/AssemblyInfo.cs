@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("EntityFilters")]
+[assembly: AssemblyTitle("ContextPooling")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("EntityFilters")]
+[assembly: AssemblyProduct("ContextPooling")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("e3a62778-b213-43ce-85bb-d16563ca7ee5")]
+[assembly: Guid("14e0b737-dec2-4bfc-9b1f-ce4e782d7e1b")]
 
 // Version information for an assembly consists of the following four values:
 //

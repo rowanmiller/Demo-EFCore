@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace EntityFilters.SoftDelete
+namespace EntityFilters.MultiTenant
 {
     class Program
     {
@@ -11,17 +11,21 @@ namespace EntityFilters.SoftDelete
         {
             SetupDatabase();
 
-            using (var db = new BloggingContext())
+            using (var db = new BloggingContext("rowan"))
             {
-                var blogs = db.Blogs.Include(b => b.Posts).ToList();
+                var blogs = db.Blogs
+                    .Include(b => b.Posts)
+                    .ToList();
 
                 foreach (var blog in blogs)
                 {
-                    Console.WriteLine($"{blog.Url.PadRight(33)} [IsDeleted = {blog.IsDeleted}]");
+                    Console.WriteLine($"{blog.Url.PadRight(33)} [Tenant: {blog.TenantId}]");
+
                     foreach (var post in blog.Posts)
                     {
-                        Console.WriteLine($" - {post.Title.PadRight(33)} [IsDeleted = {post.IsDeleted}]");
+                        Console.WriteLine($" - {post.Title.PadRight(30)} [IsDeleted: {post.IsDeleted}]");
                     }
+
                     Console.WriteLine();
                 }
             }
@@ -29,7 +33,7 @@ namespace EntityFilters.SoftDelete
 
         private static void SetupDatabase()
         {
-            using (var db = new BloggingContext())
+            using (var db = new BloggingContext("rowan"))
             {
                 if (db.Database.EnsureCreated())
                 {
@@ -46,17 +50,6 @@ namespace EntityFilters.SoftDelete
 
                     db.Blogs.Add(new Blog
                     {
-                        Url = "http://sample.com/blogs/catfish",
-                        IsDeleted = true,
-                        Posts = new List<Post>
-                        {
-                            new Post { Title = "Catfish care 101" },
-                            new Post { Title = "History of the catfish name" },
-                        }
-                    });
-
-                    db.Blogs.Add(new Blog
-                    {
                         Url = "http://sample.com/blogs/cats",
                         Posts = new List<Post>
                         {
@@ -67,6 +60,21 @@ namespace EntityFilters.SoftDelete
                     });
 
                     db.SaveChanges();
+
+                    using (var jeff_db = new BloggingContext("jeff"))
+                    {
+                        jeff_db.Blogs.Add(new Blog
+                        {
+                            Url = "http://sample.com/blogs/catfish",
+                            Posts = new List<Post>
+                        {
+                            new Post { Title = "Catfish care 101" },
+                            new Post { Title = "History of the catfish name" },
+                        }
+                        });
+
+                        jeff_db.SaveChanges();
+                    }
                 }
             }
         }
@@ -74,32 +82,50 @@ namespace EntityFilters.SoftDelete
 
     public class BloggingContext : DbContext
     {
+        private readonly string _tenantId;
+
+        public BloggingContext(string tenant)
+        {
+            _tenantId = tenant;
+        }
+
         public DbSet<Blog> Blogs { get; set; }
         public DbSet<Post> Posts { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=Demo.EntityFilters.SoftDelete;Trusted_Connection=True;");
+            optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=Demo.EntityFilters;Trusted_Connection=True;ConnectRetryCount=0;");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Blog>().HasQueryFilter(b => !EF.Property<bool>(b, "IsDeleted"));
-            modelBuilder.Entity<Post>().HasQueryFilter(b => !b.IsDeleted);
+
+        }
+
+        public override int SaveChanges()
+        {
+            ChangeTracker.DetectChanges();
+
+            foreach (var item in ChangeTracker.Entries().Where(e => e.State == EntityState.Added && e.Metadata.GetProperties().Any(p => p.Name == "TenantId")))
+            {
+                item.CurrentValues["TenantId"] = _tenantId;
+            }
+
+            return base.SaveChanges();
         }
     }
 
-    public class Blog
+    public class Blog 
     {
+        public string TenantId { get; set; }
         public int BlogId { get; set; }
         public string Name { get; set; }
         public string Url { get; set; }
-        public bool IsDeleted { get; set; }
 
         public List<Post> Posts { get; set; }
     }
 
-    public class Post
+    public class Post 
     {
         public int PostId { get; set; }
         public string Title { get; set; }

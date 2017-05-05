@@ -20,7 +20,7 @@ namespace EFFunctions
         {
             var likeExpression = $"%{term}%";
 
-            return _db.Blogs.FromSql("SELECT * FROM dbo.Blogs WHERE Url LIKE {0}", likeExpression);
+            return _db.Blogs.Where(b =>EF.Functions.Like(b.Url, likeExpression));
         }
     }
 }

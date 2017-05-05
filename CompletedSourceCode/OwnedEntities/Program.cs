@@ -14,6 +14,9 @@ namespace OwnedEntities
 
             using (var db = new CustomerContext())
             {
+                var usa = new Country { Id = "USA", Name = "United States of America" };
+                db.Add(usa);
+
                 db.Customers.Add(new Customer
                 {
                     Name = "Rowan",
@@ -21,19 +24,25 @@ namespace OwnedEntities
                     {
                         LineOne = "Microsoft Campus",
                         LineTwo = "One Microsoft Way",
-                        CityOrTown = "Redmond",
-                        PostalOrZipCode = "98052",
-                        StateOrProvince = "WA",
-                        CountryName = "United States of America"
+                        Location = new Location
+                        {
+                            CityOrTown = "Redmond",
+                            PostalOrZipCode = "98052",
+                            StateOrProvince = "WA",
+                            Country = usa
+                        },
                     },
                     PhysicalAddress = new Address
                     {
                         LineOne = "Washington State Convention Center",
                         LineTwo = "705 Pike St",
-                        CityOrTown = "Seattle",
-                        PostalOrZipCode = "98101",
-                        StateOrProvince = "WA",
-                        CountryName = "United States of America"
+                        Location = new Location
+                        {
+                            CityOrTown = "Seattle",
+                            PostalOrZipCode = "98101",
+                            StateOrProvince = "WA",
+                            Country = usa
+                        },
                     }
                 });
 
@@ -70,7 +79,14 @@ namespace OwnedEntities
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Customer>()
+                .OwnsOne(c => c.WorkAddress)
+                    .OwnsOne(a => a.Location);
 
+            modelBuilder.Entity<Customer>()
+                .OwnsOne(c => c.PhysicalAddress)
+                    .ToTable("Customers_Location")
+                    .OwnsOne(a => a.Location);
         }
     }
 
@@ -87,9 +103,22 @@ namespace OwnedEntities
     {
         public string LineOne { get; set; }
         public string LineTwo { get; set; }
+        public Location Location { get; set; }
+    }
+
+    public class Location
+    {
         public string PostalOrZipCode { get; set; }
         public string StateOrProvince { get; set; }
         public string CityOrTown { get; internal set; }
-        public string CountryName { get; set; }
+
+        public string CountryId { get; set; }
+        public Country Country { get; set; }
+    }
+
+    public class Country
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
     }
 }

@@ -1,14 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\MSTest.TestAdapter.1.1.11\build\net45\MSTest.TestAdapter.props" Condition="Exists('..\packages\MSTest.TestAdapter.1.1.11\build\net45\MSTest.TestAdapter.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{4226F248-3897-4985-A949-805BCE248589}</ProjectGuid>
+    <ProjectGuid>{1A258793-A500-478B-9672-D19D4D99A5C4}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>EFFunctions</RootNamespace>
-    <AssemblyName>EF.Functions</AssemblyName>
+    <RootNamespace>CompiledQueries</RootNamespace>
+    <AssemblyName>CompiledQueries</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -37,9 +36,6 @@
   <ItemGroup>
     <Reference Include="Microsoft.EntityFrameworkCore, Version=2.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.EntityFrameworkCore.2.0.0-preview1-24854\lib\net46\Microsoft.EntityFrameworkCore.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.EntityFrameworkCore.InMemory, Version=2.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.EntityFrameworkCore.InMemory.2.0.0-preview1-24854\lib\netstandard1.3\Microsoft.EntityFrameworkCore.InMemory.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.EntityFrameworkCore.Relational, Version=2.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.EntityFrameworkCore.Relational.2.0.0-preview1-24854\lib\net46\Microsoft.EntityFrameworkCore.Relational.dll</HintPath>
@@ -77,12 +73,6 @@
     <Reference Include="Microsoft.Extensions.Primitives, Version=2.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Extensions.Primitives.2.0.0-preview1-24854\lib\netstandard1.0\Microsoft.Extensions.Primitives.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\MSTest.TestFramework.1.1.11\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\MSTest.TestFramework.1.1.11\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll</HintPath>
-    </Reference>
     <Reference Include="Remotion.Linq, Version=2.1.0.0, Culture=neutral, PublicKeyToken=fee00910d6e5f53b, processorArchitecture=MSIL">
       <HintPath>..\packages\Remotion.Linq.2.1.1\lib\net45\Remotion.Linq.dll</HintPath>
     </Reference>
@@ -96,6 +86,7 @@
     </Reference>
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Common, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Data.Common.4.3.0\lib\net451\System.Data.Common.dll</HintPath>
@@ -123,18 +114,222 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BlogService.cs" />
+    <Compile Include="..\Performance\EFCore\Address.cs">
+      <Link>Model\Address.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\AddressType.cs">
+      <Link>Model\AddressType.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\AdventureWorksContext.cs">
+      <Link>Model\AdventureWorksContext.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\AWBuildVersion.cs">
+      <Link>Model\AWBuildVersion.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\BillOfMaterials.cs">
+      <Link>Model\BillOfMaterials.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\BusinessEntity.cs">
+      <Link>Model\BusinessEntity.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\BusinessEntityAddress.cs">
+      <Link>Model\BusinessEntityAddress.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\BusinessEntityContact.cs">
+      <Link>Model\BusinessEntityContact.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\ContactType.cs">
+      <Link>Model\ContactType.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\CountryRegion.cs">
+      <Link>Model\CountryRegion.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\CountryRegionCurrency.cs">
+      <Link>Model\CountryRegionCurrency.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\CreditCard.cs">
+      <Link>Model\CreditCard.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\Culture.cs">
+      <Link>Model\Culture.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\Currency.cs">
+      <Link>Model\Currency.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\CurrencyRate.cs">
+      <Link>Model\CurrencyRate.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\Customer.cs">
+      <Link>Model\Customer.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\DatabaseLog.cs">
+      <Link>Model\DatabaseLog.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\Department.cs">
+      <Link>Model\Department.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\EmailAddress.cs">
+      <Link>Model\EmailAddress.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\Employee.cs">
+      <Link>Model\Employee.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\EmployeeDepartmentHistory.cs">
+      <Link>Model\EmployeeDepartmentHistory.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\EmployeePayHistory.cs">
+      <Link>Model\EmployeePayHistory.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\ErrorLog.cs">
+      <Link>Model\ErrorLog.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\Illustration.cs">
+      <Link>Model\Illustration.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\JobCandidate.cs">
+      <Link>Model\JobCandidate.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\Location.cs">
+      <Link>Model\Location.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\Password.cs">
+      <Link>Model\Password.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\Person.cs">
+      <Link>Model\Person.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\PersonCreditCard.cs">
+      <Link>Model\PersonCreditCard.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\PersonPhone.cs">
+      <Link>Model\PersonPhone.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\PhoneNumberType.cs">
+      <Link>Model\PhoneNumberType.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\Product.cs">
+      <Link>Model\Product.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\ProductCategory.cs">
+      <Link>Model\ProductCategory.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\ProductCostHistory.cs">
+      <Link>Model\ProductCostHistory.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\ProductDescription.cs">
+      <Link>Model\ProductDescription.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\ProductInventory.cs">
+      <Link>Model\ProductInventory.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\ProductListPriceHistory.cs">
+      <Link>Model\ProductListPriceHistory.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\ProductModel.cs">
+      <Link>Model\ProductModel.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\ProductModelIllustration.cs">
+      <Link>Model\ProductModelIllustration.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\ProductModelProductDescriptionCulture.cs">
+      <Link>Model\ProductModelProductDescriptionCulture.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\ProductPhoto.cs">
+      <Link>Model\ProductPhoto.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\ProductProductPhoto.cs">
+      <Link>Model\ProductProductPhoto.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\ProductReview.cs">
+      <Link>Model\ProductReview.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\ProductSubcategory.cs">
+      <Link>Model\ProductSubcategory.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\ProductVendor.cs">
+      <Link>Model\ProductVendor.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\PurchaseOrderDetail.cs">
+      <Link>Model\PurchaseOrderDetail.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\PurchaseOrderHeader.cs">
+      <Link>Model\PurchaseOrderHeader.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\SalesOrderDetail.cs">
+      <Link>Model\SalesOrderDetail.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\SalesOrderHeader.cs">
+      <Link>Model\SalesOrderHeader.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\SalesOrderHeaderSalesReason.cs">
+      <Link>Model\SalesOrderHeaderSalesReason.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\SalesPerson.cs">
+      <Link>Model\SalesPerson.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\SalesPersonQuotaHistory.cs">
+      <Link>Model\SalesPersonQuotaHistory.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\SalesReason.cs">
+      <Link>Model\SalesReason.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\SalesTaxRate.cs">
+      <Link>Model\SalesTaxRate.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\SalesTerritory.cs">
+      <Link>Model\SalesTerritory.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\SalesTerritoryHistory.cs">
+      <Link>Model\SalesTerritoryHistory.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\ScrapReason.cs">
+      <Link>Model\ScrapReason.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\Shift.cs">
+      <Link>Model\Shift.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\ShipMethod.cs">
+      <Link>Model\ShipMethod.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\ShoppingCartItem.cs">
+      <Link>Model\ShoppingCartItem.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\SpecialOffer.cs">
+      <Link>Model\SpecialOffer.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\SpecialOfferProduct.cs">
+      <Link>Model\SpecialOfferProduct.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\StateProvince.cs">
+      <Link>Model\StateProvince.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\Store.cs">
+      <Link>Model\Store.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\TransactionHistory.cs">
+      <Link>Model\TransactionHistory.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\TransactionHistoryArchive.cs">
+      <Link>Model\TransactionHistoryArchive.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\UnitMeasure.cs">
+      <Link>Model\UnitMeasure.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\Vendor.cs">
+      <Link>Model\Vendor.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\WorkOrder.cs">
+      <Link>Model\WorkOrder.cs</Link>
+    </Compile>
+    <Compile Include="..\Performance\EFCore\WorkOrderRouting.cs">
+      <Link>Model\WorkOrderRouting.cs</Link>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="DemoScript.md" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Packaging.Tools.1.0.0-preview1-25301-01\build\Microsoft.Packaging.Tools.targets" Condition="Exists('..\packages\Microsoft.Packaging.Tools.1.0.0-preview1-25301-01\build\Microsoft.Packaging.Tools.targets')" />
@@ -144,9 +339,6 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Microsoft.Packaging.Tools.1.0.0-preview1-25301-01\build\Microsoft.Packaging.Tools.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Packaging.Tools.1.0.0-preview1-25301-01\build\Microsoft.Packaging.Tools.targets'))" />
     <Error Condition="!Exists('..\packages\NETStandard.Library.2.0.0-preview1-25301-01\build\NETStandard.Library.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NETStandard.Library.2.0.0-preview1-25301-01\build\NETStandard.Library.targets'))" />
-    <Error Condition="!Exists('..\packages\MSTest.TestAdapter.1.1.11\build\net45\MSTest.TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MSTest.TestAdapter.1.1.11\build\net45\MSTest.TestAdapter.props'))" />
-    <Error Condition="!Exists('..\packages\MSTest.TestAdapter.1.1.11\build\net45\MSTest.TestAdapter.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MSTest.TestAdapter.1.1.11\build\net45\MSTest.TestAdapter.targets'))" />
   </Target>
   <Import Project="..\packages\NETStandard.Library.2.0.0-preview1-25301-01\build\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.0-preview1-25301-01\build\NETStandard.Library.targets')" />
-  <Import Project="..\packages\MSTest.TestAdapter.1.1.11\build\net45\MSTest.TestAdapter.targets" Condition="Exists('..\packages\MSTest.TestAdapter.1.1.11\build\net45\MSTest.TestAdapter.targets')" />
 </Project>

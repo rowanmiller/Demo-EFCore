@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E3A62778-B213-43CE-85BB-D16563CA7EE5}</ProjectGuid>
+    <ProjectGuid>{14E0B737-DEC2-4BFC-9B1F-CE4E782D7E1B}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>EntityFilters.SoftDelete</RootNamespace>
-    <AssemblyName>EntityFilters.SoftDelete</AssemblyName>
+    <RootNamespace>ContextPooling</RootNamespace>
+    <AssemblyName>ContextPooling</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
