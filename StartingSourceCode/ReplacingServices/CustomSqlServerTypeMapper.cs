@@ -2,12 +2,18 @@
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
 using System.Data;
+using JetBrains.Annotations;
 
 namespace ReplacingServices
 {
     public class CustomSqlServerTypeMapper : SqlServerTypeMapper
     {
         private readonly RelationalTypeMapping _xml = new RelationalTypeMapping("xml", typeof(string), DbType.Xml);
+
+        public CustomSqlServerTypeMapper(RelationalTypeMapperDependencies dependencies) 
+            : base(dependencies)
+        {
+        }
 
         public override RelationalTypeMapping FindMapping(IProperty property)
         {
