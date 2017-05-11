@@ -123,9 +123,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Hacks.cs" />
-    <Compile Include="Migrations\20170511015159_InitialSchema.cs" />
-    <Compile Include="Migrations\20170511015159_InitialSchema.designer.cs">
-      <DependentUpon>20170511015159_InitialSchema.cs</DependentUpon>
+    <Compile Include="Migrations\20170511013632_InitialSchema.cs" />
+    <Compile Include="Migrations\20170511013632_InitialSchema.designer.cs">
+      <DependentUpon>20170511013632_InitialSchema.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20170511013723_TagData.cs" />
+    <Compile Include="Migrations\20170511013723_TagData.designer.cs">
+      <DependentUpon>20170511013723_TagData.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20170511014523_UserData.cs" />
+    <Compile Include="Migrations\20170511014523_UserData.designer.cs">
+      <DependentUpon>20170511014523_UserData.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20170511014618_FixUserData.cs" />
+    <Compile Include="Migrations\20170511014618_FixUserData.designer.cs">
+      <DependentUpon>20170511014618_FixUserData.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\BloggingContextModelSnapshot.cs" />
     <Compile Include="Program.cs" />
@@ -133,7 +145,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="DemoScript.md" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

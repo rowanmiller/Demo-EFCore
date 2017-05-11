@@ -16,7 +16,6 @@ namespace SeedData
         public DbSet<Blog> Blogs { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<Tag> Tags { get; set; }
-        public DbSet<User> Users { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -27,7 +26,17 @@ namespace SeedData
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
+            modelBuilder.Entity<Tag>().SeedData(
+                new Tag { TagId = ".NET" },
+                new Tag { TagId = "VisualStudio" },
+                new Tag { TagId = "C#" },
+                new Tag { TagId = "F#" },
+                new Tag { TagId = "VB.NET" },
+                new Tag { TagId = "EnityFramework" },
+                new Tag { TagId = "ASP.NET" });
+
+            modelBuilder.Entity<User>().SeedData(
+                new User { UserId = 2, UserName = "Administrator" });
         }
     }
 
