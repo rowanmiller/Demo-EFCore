@@ -8,43 +8,6 @@ namespace OwnedEntities
     {
         static void Main(string[] args)
         {
-            RecreateDatabase();
-
-            Console.Write(" Inserting Data......");
-
-            using (var db = new CustomerContext())
-            {
-                db.Customers.Add(new Customer
-                {
-                    Name = "Rowan",
-                    WorkAddress = new Address
-                    {
-                        LineOne = "Microsoft Campus",
-                        LineTwo = "One Microsoft Way",
-                        CityOrTown = "Redmond",
-                        PostalOrZipCode = "98052",
-                        StateOrProvince = "WA",
-                        CountryName = "United States of America"
-                    },
-                    PhysicalAddress = new Address
-                    {
-                        LineOne = "Washington State Convention Center",
-                        LineTwo = "705 Pike St",
-                        CityOrTown = "Seattle",
-                        PostalOrZipCode = "98101",
-                        StateOrProvince = "WA",
-                        CountryName = "United States of America"
-                    }
-                });
-
-                db.SaveChanges();
-            }
-
-            Console.WriteLine(" done");
-        }
-
-        private static void RecreateDatabase()
-        {
             using (var db = new CustomerContext())
             {
                 Console.WriteLine("Recreating database from current model");
