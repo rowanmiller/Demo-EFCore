@@ -20,7 +20,7 @@ namespace SeedData
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=SeeData;Trusted_Connection=True;");
+            optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=SeedData;Trusted_Connection=True;");
 
             optionsBuilder.ReplaceService<IMigrationCommandExecutor, MyExecutor>();
         }

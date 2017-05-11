@@ -1,9 +1,13 @@
-﻿# Demo: OwnedEntities
+﻿# Demo: Seed Data
 
 ## Everytime Setup
 
 Required before/after each run of the demo
-* Reset the starting point source code (`git reset --hard`)
+* Delete the Demo.SeedData database
+ * Easiest way is to get (SQL Server Management Studio)[https://www.microsoft.com/en-us/sql-server/sql-server-downloads] (free)
+* Reset the starting point source code
+ * `git add .` (gets the new migration files added to local changes so that the next step will revert them)
+ * `git reset --hard`
 
 ## Demo Steps
 
