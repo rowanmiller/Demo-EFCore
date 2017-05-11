@@ -43,7 +43,7 @@ namespace EntityFilters.MultiTenant
                         Posts = new List<Post>
                         {
                             new Post { Title = "Fish care 101" },
-                            new Post { Title = "Caring for tropical fish", IsDeleted = true },
+                            new Post { Title = "Caring for tropical fish" },
                             new Post { Title = "Types of ornamental fish" }
                         }
                     });
@@ -53,7 +53,7 @@ namespace EntityFilters.MultiTenant
                         Url = "http://sample.com/blogs/cats",
                         Posts = new List<Post>
                         {
-                            new Post { Title = "Cat care 101", IsDeleted = true },
+                            new Post { Title = "Cat care 101" },
                             new Post { Title = "Caring for tropical cats" },
                             new Post { Title = "Types of ornamental cats" }
                         }
@@ -75,6 +75,15 @@ namespace EntityFilters.MultiTenant
 
                         jeff_db.SaveChanges();
                     }
+
+                    db.Posts
+                        .Where(p => p.Title == "Caring for tropical fish"
+                                    || p.Title == "Cat care 101")
+                        .ToList()
+                        .ForEach(p => db.Posts.Remove(p));
+
+                    db.SaveChanges();
+
                 }
             }
         }
@@ -112,6 +121,12 @@ namespace EntityFilters.MultiTenant
             foreach (var item in ChangeTracker.Entries().Where(e => e.State == EntityState.Added && e.Metadata.GetProperties().Any(p => p.Name == "TenantId")))
             {
                 item.CurrentValues["TenantId"] = _tenantId;
+            }
+
+            foreach (var item in ChangeTracker.Entries<Post>().Where(e => e.State == EntityState.Deleted))
+            {
+                item.State = EntityState.Modified;
+                item.CurrentValues["IsDeleted"] = true;
             }
 
             return base.SaveChanges();

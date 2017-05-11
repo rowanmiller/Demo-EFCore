@@ -21,22 +21,22 @@ namespace CompiledQueries
                 {
                     using (var db = new AdventureWorksContext())
                     {
-                        foreach (var accountNumber in accountNumbers)
+                        foreach (var id in accountNumbers)
                         {
-                            var customer = db.Customers.Single(c => c.AccountNumber == accountNumber);
+                            var customer = db.Customers.Single(c => c.AccountNumber == id);
                         }
                     }
                 },
                 compiledTest: (accountNumbers) =>
                 {
-                    var query = EF.CompileQuery((AdventureWorksContext db, string accountNumber) =>
-                        db.Customers.Single(c => c.AccountNumber == accountNumber));
+                    var query = EF.CompileQuery((AdventureWorksContext db, string id) =>
+                        db.Customers.Single(c => c.AccountNumber == id));
 
                     using (var db = new AdventureWorksContext())
                     {
-                        foreach (var accountNumber in accountNumbers)
+                        foreach (var id in accountNumbers)
                         {
-                            var customer = query(db, accountNumber);
+                            var customer = query(db, id);
                         }
                     }
                 });

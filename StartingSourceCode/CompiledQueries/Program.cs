@@ -21,9 +21,9 @@ namespace CompiledQueries
                 {
                     using (var db = new AdventureWorksContext())
                     {
-                        foreach (var accountNumber in accountNumbers)
+                        foreach (var id in accountNumbers)
                         {
-                            var customer = db.Customers.Single(c => c.AccountNumber == accountNumber);
+                            var customer = db.Customers.Single(c => c.AccountNumber == id);
                         }
                     }
                 },
