@@ -13,7 +13,8 @@ namespace CompiledQueries
             // Warmup
             using (var db = new AdventureWorksContext())
             {
-                var customer = db.Customers.First();
+                var id = "AW00000001";
+                var customer = db.Customers.Single(c => c.AccountNumber == id);
             }
 
             RunTest(
