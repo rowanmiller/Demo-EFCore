@@ -160,8 +160,8 @@ namespace Performance
                 var efCore = stopwatch.ElapsedMilliseconds;
                 Console.WriteLine($"  - EF Core:    {efCore.ToString().PadLeft(4)}ms");
 
-                var result = (ef6 - efCore) / (double)ef6;
-                Console.WriteLine($"  - Improvement: {result.ToString("P0")}");
+                var result = ef6 / (double)efCore;
+                Console.WriteLine($"  - Speedup: {result.ToString("F1")}x");
                 Console.WriteLine();
             }
         }
